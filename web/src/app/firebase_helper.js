@@ -1,37 +1,65 @@
-window.FIREBASE_URL = "https://flickering-fire-25.firebaseio.com";
+window.FIREBASE_URL = "https://innovativeboard.firebaseio.com";
 
 angular.module('firebaseHelper', [])
 .service('firebaseHelper', function($firebaseObject, $firebaseArray, $firebaseObject, $firebaseAuth, $rootScope, $state, notify) {
     var self = this;
 
     this.getFireBaseInstance = function(key) {
+        key = getPath(key);
         return new Firebase(key?FIREBASE_URL + "/" + key:FIREBASE_URL);
     }
 
+    this.buildPath = function(arr) {
+        return arr.join("/")
+    }
+
+    var getPath = function(p) {
+        if (!p) {
+            return p;
+        }
+        if (typeof(p) == "string") {
+            return p;
+        }
+        return self.buildPath(p);
+    }
+
     this.bindObject = function(path, $scope, key) {
+        path = getPath(path);
         console.log("bindObject", path);
         var syncObject = $firebaseObject(self.getFireBaseInstance(path));
         syncObject.$bindTo($scope, key);
     }
 
     this.syncObject = function(path) {
+        path = getPath(path);
         console.log("syncObject", path);
         return $firebaseObject(self.getFireBaseInstance(path));
     }
 
     this.syncProtectedObject = function(path) {
+        path = getPath(path);
         console.log("syncProtectedObject", path);
         return $firebaseObject(self.getFireBaseInstance(path + "/" + self.getUID()));
     }
 
     this.syncArray = function(path) {
+        path = getPath(path);
         console.log("syncArray", path);
         return $firebaseArray(self.getFireBaseInstance(path));
     }
 
     this.syncProtectedArray = function(path) {
+        path = getPath(path);
         console.log("syncArray", path + "/" + self.getUID());
         return $firebaseArray(self.getFireBaseInstance(path + "/" + self.getUID()));
+    }
+
+    this.transaction = function(path, f) {
+        path = getPath(path);
+        self.getFireBaseInstance(path).transaction(function(current_val) {
+            if (f) {return f(current_val);}
+            return current_val;
+        })
     }
 
     this.auth = $firebaseAuth(self.getFireBaseInstance());
@@ -80,6 +108,15 @@ angular.module('firebaseHelper', [])
             }
         }
         return "";
+    }
+
+    this.getGravatar = function() {
+        if (this.authData) {
+            if (this.authData.password && this.authData.password.email) {
+                return "http://www.gravatar.com/avatar/" + md5(this.authData.password.email) + "?s=200&r=pg&d=mm";
+            }
+        }
+        return "http://www.gravatar.com/avatar/" + md5("nothing") + "?s=200&r=pg&d=mm";
     }
 
     this.logout = function() {

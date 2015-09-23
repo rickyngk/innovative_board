@@ -1,35 +1,37 @@
-<div class="wrapper wrapper-content animated fadeInRight">
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="MainCtrl">
     <div class="row">
-        <div class="col-lg-12">
-            <div class="text-center m-t-lg">
-                <h1>
-                    <span ng-show="isAdmin">Admin</span>
-                    <span ng-show="!isAdmin">User</span>
-                </h1>
-                <small>
-                    {{main.descriptionText}}
-
-                    <i class="glyphicon glyphicon-pencil"></i>
-
-                    <br/>
-                </small>
+        <div class="col-lg-offset-2 col-lg-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>In discussion ideas</h5>
+                    <div class="ibox-tools" ng-show="!isLoading">
+                        <!-- <span class="label label-warning-light">10 Messages</span> -->
+                        <a href="" ng-click="showAddBlock = true">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div>
+                        <div class="feed-activity-list">
+                            <div class="feed-element" ng-hide="!isLoading">
+                                <div class="media-body ">
+                                    <strong>Loading <i class="fa fa-refresh fa-spin"></i> </strong>
+                                </div>
+                            </div>
+                            <div class="feed-element" ng-show="!isLoading && ideas.length == 0 && !showAddBlock">
+                                <div class="media-body ">
+                                    <strong>No idea here. <a ng-click="showAddBlock = true">Create one</a> </strong>
+                                </div>
+                            </div>
+                            <new-idea-feed ng-show="showAddBlock" style="display:block" class="feed-element" on-finished="showAddBlock = false"></new-idea-feed>
+                            <idea-feed style="display:block" class="feed-element" data="r" ng-repeat="r in ideas"></idea-feed>
+                        </div>
+                        <!-- <button ng-show="ideas && ideas.length > 0" class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More</button> -->
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-lg-12">
-            <div>
-                <button class="btn btn-white btn-xs" type="button" ng-click="onAddTopic()">Add a topics</button>
-            </div>
-            <ul>
-                <li ng-repeat = "r in topics">
-                    {{r}} <button class="btn btn-white btn-xs" type="button" ng-click="onPost(r)">Post</button>
-                </li>
-            </ul>
-            POST
-            <ul>
-                <li ng-repeat = "r in posts">
-                    {{r}}
-                </li>
-            </ul>
+
         </div>
     </div>
 </div>

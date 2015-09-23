@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('inspinia').controller('LoginCtrl', function ($scope, $state, firebaseHelper) {
-	$scope.email = "ricky.ngk@gmail.com";
-	$scope.password = "1234";
+	$scope.email = "";
+	$scope.password = "";
 	$scope.onlogin = function() {
         firebaseHelper.login($scope.email, $scope.password, {
             success: function(data) {

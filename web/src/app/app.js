@@ -49,5 +49,9 @@ angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', '
     $rootScope.notifyError = function(message) {
         notify({ message: message, classes: 'alert-danger', templateUrl: $rootScope.inspiniaTemplate});
     }
+
+    $rootScope.gravatar = function(email) {
+        return "http://www.gravatar.com/avatar/" + md5(email) + "?s=200&r=pg&d=mm";
+    }
 })
 ;
