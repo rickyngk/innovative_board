@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('inspinia')
   .controller('MainCtrl', function ($scope, firebaseHelper, $rootScope) {
         $scope.ideas = null;

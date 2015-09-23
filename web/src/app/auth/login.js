@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('inspinia').controller('LoginCtrl', function ($scope, $state, firebaseHelper) {
 	$scope.email = "";
 	$scope.password = "";

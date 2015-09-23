@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngResource', 'ui.router', 'ui.bootstrap', 'firebase', 'firebaseHelper', 'cgNotify'])
 
 .config(function ($stateProvider, $urlRouterProvider) {

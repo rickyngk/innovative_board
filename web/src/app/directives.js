@@ -1,5 +1,3 @@
-'use strict';
-
 //Directive used to set metisMenu and minimalize button
 angular.module('inspinia')
     .directive('sideNavigation', function ($timeout) {
