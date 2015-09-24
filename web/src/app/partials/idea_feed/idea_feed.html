@@ -1,0 +1,19 @@
+<a ui-sref="profile" class="pull-left">
+    <img alt="image" class="img-circle" ng-src="{{gravatar(user_profile.email)}}">
+</a>
+<div class="media-body ">
+    <small ng-show="data.score > 0" class="pull-right label label-info">{{data.score || 0}} pts</small>
+    <small ng-show="data.score < 0" class="pull-right label label-danger">{{data.score || 0}} pts</small>
+    <small ng-show="!data.score || data.score == 0" class="pull-right label">{{data.score || 0}} pts</small>
+    <strong>{{user_profile.display_name}}</strong><br/>
+    <small class="text-muted">{{createdDate}}</small> <br/>
+    <small class="text-muted">Created by: {{created_user_profile.display_name}}</small>
+    <div class="well" ng-bind-html="title"></div>
+    <small class="text-success" ng-show="ideas_vote.value==1"><i class="fa fa-thumbs-up"></i> You like this </i></small>
+    <small class="text-danger" ng-show="ideas_vote.value==-1"><i class="fa fa-thumbs-down"></i> You don't like this </i></small>
+    <div class="pull-right">
+        <a class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=1, 'btn-primary': ideas_vote.value==1}" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a>
+        <a class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=-1, 'btn-danger': ideas_vote.value==-1}" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{data.down_votes || 0}}</a>
+        <a class="btn btn-xs btn-white" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{data.comments || 0}}</a>
+    </div>
+</div>
