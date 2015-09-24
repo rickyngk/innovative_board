@@ -255,8 +255,8 @@ angular.module('inspinia')
                         </select> \
                         <div class="pull-right"> \
                             <strong>{{140 - data.title.length}} chars left </strong> \
-                            <a ng-disabled="!data.title" class="btn btn-xs btn-white" ng-click="onSave()"><i class="fa fa-save"></i> Save</a> \
-                            <a class="btn btn-xs btn-white" ng-click="onCancel()"><i class="fa fa-trash"></i> Cancel</a> \
+                            <button ng-disabled="!data.title" class="btn btn-xs btn-primary" ng-click="onSave()"><i class="fa fa-save"></i> Save</button> \
+                            <button class="btn btn-xs btn-warning" ng-click="onCancel()"><i class="fa fa-trash"></i> Cancel</button> \
                         </div> \
                     </div> \
             '
