@@ -202,7 +202,7 @@ angular.module('inspinia')
                 $scope.users = [];
 
                 var doSync = function() {
-                    console.log("xxxxxx");
+                    // console.log("xxxxxx");
                     if (firebaseHelper.getUID()) {
                         $scope.data.uid = firebaseHelper.getUID();
                         $scope.user_profile = firebaseHelper.syncObject(["profiles_pub", $scope.data.uid]);
@@ -227,7 +227,7 @@ angular.module('inspinia')
                 }
 
                 $scope.$on("user:login", function(data) {
-                    console.log("yyyyyyy");
+                    // console.log("yyyyyyy");
                     doSync();
                 });
                 doSync();
