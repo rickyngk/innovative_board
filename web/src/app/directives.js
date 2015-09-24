@@ -100,6 +100,22 @@ angular.module('inspinia')
                         return data;
                     })
                 }
+                var unvote = function(from_up_vote, from_down_vote) {
+                    firebaseHelper.transaction(["ideas", $scope.group, $scope.data.$id], function(data) {
+                        if (!data) {
+                            // data = {up_votes: 0, down_votes: 0, comments: 0, score: 0};
+                            return;
+                        }
+                        if (from_up_vote) {
+                            data.up_votes = (data.up_votes || 0) - 1;
+                        }
+                        if (from_down_vote) {
+                            data.down_votes = (data.down_votes || 0) - 1;
+                        }
+                        data.score = (data.up_votes || 0) - (data.down_votes || 0);
+                        return data;
+                    })
+                }
 
                 $scope.onUpVote = function(from_down_vote) {
                     if (!firebaseHelper.getUID()) {
@@ -112,10 +128,14 @@ angular.module('inspinia')
                         }
                         if (data.value == 0) {
                             upvote(false);
+                            data.value = 1;
                         } else if (data.value == -1){
                             upvote(true);
+                            data.value = 1;
+                        } else {
+                            unvote(true, false);
+                            data.value = 0;
                         }
-                        data.value = 1;
                         return data;
                     });
                 }
@@ -130,10 +150,14 @@ angular.module('inspinia')
                         }
                         if (data.value == 0) {
                             downvote(false);
+                            data.value = -1;
                         } else if (data.value == 1){
                             downvote(true);
+                            data.value = -1;
+                        } else {
+                            unvote(false, true);
+                            data.value = 0;
                         }
-                        data.value = -1;
                         return data;
                     });
                 }
@@ -153,9 +177,11 @@ angular.module('inspinia')
                         <small class="text-muted">{{createdDate}}</small> <br>\
                         <small class="text-muted">Created by: {{created_user_profile.display_name}}</small> \
                         <div class="well" ng-bind-html="title"></div> \
+                        <small class="text-success" ng-show="ideas_vote.value==1"><i class="fa fa-thumbs-up"></i> You like this </i></small> \
+                        <small class="text-danger" ng-show="ideas_vote.value==-1"><i class="fa fa-thumbs-down"></i> You don\'t like this </i></small>\
                         <div class="pull-right"> \
-                            <a class="btn btn-xs btn-white" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a> \
-                            <a class="btn btn-xs btn-white" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{data.down_votes || 0}}</a> \
+                            <a class="btn btn-xs" ng-class="{\'btn-white\': ideas_vote.value!=1, \'btn-primary\': ideas_vote.value==1}" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a> \
+                            <a class="btn btn-xs" ng-class="{\'btn-white\': ideas_vote.value!=-1, \'btn-danger\': ideas_vote.value==-1}" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{data.down_votes || 0}}</a> \
                             <a class="btn btn-xs btn-white" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{data.comments || 0}}</a> \
                         </div> \
                     </div> \
