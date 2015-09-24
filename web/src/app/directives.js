@@ -89,7 +89,11 @@ angular.module('inspinia')
                 }
 
                 $scope.onUpVote = function(from_down_vote) {
-                    firebaseHelper.transaction(["ideas_votes", $scope.data.$id, $scope.data.uid], function(data) {
+                    if (!firebaseHelper.getUID()) {
+                        $rootScope.notifyError("Something wrong @@");
+                        return;
+                    }
+                    firebaseHelper.transaction(["ideas_votes", $scope.data.$id, firebaseHelper.getUID()], function(data) {
                         if (!data) { //not vote yet
                             data = {value: 0};
                         }
@@ -103,7 +107,11 @@ angular.module('inspinia')
                     });
                 }
                 $scope.onDownVote = function() {
-                    firebaseHelper.transaction(["ideas_votes", $scope.data.$id, $scope.data.uid], function(data) {
+                    if (!firebaseHelper.getUID()) {
+                        $rootScope.notifyError("Something wrong @@");
+                        return;
+                    }
+                    firebaseHelper.transaction(["ideas_votes", $scope.data.$id, firebaseHelper.getUID()], function(data) {
                         if (!data) {
                             data = {value: 0};
                         }
