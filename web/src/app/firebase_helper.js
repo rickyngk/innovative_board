@@ -1,12 +1,21 @@
-window.FIREBASE_URL = "https://innovativeboard.firebaseio.com";
-
 angular.module('firebaseHelper', [])
-.service('firebaseHelper', function($firebaseObject, $firebaseArray, $firebaseObject, $firebaseAuth, $rootScope, $state, notify) {
+
+.provider('firebaseHelperConfig', [function() {
+    var endpoint = "";
+    this.setURL = function(url) {
+        endpoint = url;
+    }
+    this.$get = [function() {
+        return endpoint;
+    }]
+}])
+
+.service('firebaseHelper', function($firebaseObject, $firebaseArray, $firebaseObject, $firebaseAuth, $rootScope, $state, notify, firebaseHelperConfig) {
     var self = this;
 
     this.getFireBaseInstance = function(key) {
         key = getPath(key);
-        return new Firebase(key?FIREBASE_URL + "/" + key:FIREBASE_URL);
+        return new Firebase(key?firebaseHelperConfig + "/" + key:firebaseHelperConfig);
     }
 
     this.buildPath = function(arr) {
@@ -139,4 +148,7 @@ angular.module('firebaseHelper', [])
             });
 
     }
-});
+})
+
+
+;

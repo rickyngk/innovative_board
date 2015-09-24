@@ -1,6 +1,8 @@
 angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngResource', 'ui.router', 'ui.bootstrap', 'firebase', 'firebaseHelper', 'cgNotify'])
 
-.config(function ($stateProvider, $urlRouterProvider) {
+.config(function ($stateProvider, $urlRouterProvider, firebaseHelperConfigProvider) {
+    firebaseHelperConfigProvider.setURL("https://innovativeboard.firebaseio.com");
+
     $stateProvider
 
     .state('login', {
@@ -39,6 +41,9 @@ angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', '
             $state.go("login");
         }
     });
+
+
+
     $rootScope.inspiniaTemplate = 'components/common/notify.html';
     notify.config({
        duration: '5000',
