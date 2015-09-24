@@ -152,27 +152,31 @@ angular.module('inspinia')
                 onFinished: '&'
             },
             controller: function($scope, firebaseHelper, $sce, $rootScope) {
-                if (!firebaseHelper.getUID()) {
-                    firebaseHelper.logout();
-                    return;
-                }
                 $scope.data = {
-                    title: "",
-                    uid: firebaseHelper.getUID()
+                    title: ""
                 }
-                $scope.user_profile = firebaseHelper.syncObject(["profiles_pub", $scope.data.uid]);
                 $scope.gravatar = $rootScope.gravatar;
 
                 $scope.onSave = function() {
+                    if (!firebaseHelper.getUID()) {
+                        $rootScope.notifyError("Something wrong @@");
+                        $scope.onCancel();
+                        return;
+                    }
                     var ref = firebaseHelper.getFireBaseInstance("ideas");
                     ref.push().set({
                         createdDate: Date.now(),
                         title: $scope.data.title,
-                        uid: $scope.data.uid
+                        uid: firebaseHelper.getUID()
                     }, function() {
                         $scope.onCancel();
                     })
-                }
+                };
+
+                $scope.$on("user:login", function(data) {
+                    $scope.data.uid = firebaseHelper.getUID();
+                    $scope.user_profile = firebaseHelper.syncObject(["profiles_pub", $scope.data.uid]);
+                });
 
                 $scope.onCancel = function() {
                     $scope.data.title = "";
