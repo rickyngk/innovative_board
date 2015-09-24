@@ -66,6 +66,7 @@ angular.module('inspinia')
                 // $scope.title = $sce.trustAsHtml($scope.data.title.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 
                 $scope.user_profile = firebaseHelper.syncObject("profiles_pub/" + $scope.data.uid);
+                $scope.created_user_profile = firebaseHelper.syncObject("profiles_pub/" + $scope.data.createdBy);
                 $scope.gravatar = $rootScope.gravatar;
 
                 // $scope.ideas_stat = firebaseHelper.syncObject(["ideas", $scope.group, $scope.data.$id, "stat"]);
@@ -147,7 +148,8 @@ angular.module('inspinia')
                     <div class="media-body "> \
                         <small class="pull-right label label-info">{{data.score || 0}} pts</small> \
                         <strong>{{user_profile.display_name}}</strong><br> \
-                        <small class="text-muted">{{createdDate}}</small> \
+                        <small class="text-muted">{{createdDate}}</small> <br>\
+                        <small class="text-muted">Created by: {{created_user_profile.display_name}}</small> \
                         <div class="well" ng-bind-html="title"></div> \
                         <div class="pull-right"> \
                             <a class="btn btn-xs btn-white" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a> \
@@ -179,18 +181,40 @@ angular.module('inspinia')
                         return;
                     }
                     var ref = firebaseHelper.getFireBaseInstance(["ideas", $scope.group]);
+                    var uid = firebaseHelper.getUID();
+                    if ($scope.allowAssign && $scope.assigned_user) {
+                        uid = $scope.assigned_user;
+                    }
                     ref.push().setWithPriority({
                         createdDate: Date.now(),
                         title: $scope.data.title,
-                        uid: firebaseHelper.getUID(),
+                        uid: uid,
+                        createdBy: firebaseHelper.getUID(),
                     }, -Date.now(), function(ref) {
                         $scope.onCancel();
                     })
                 };
 
+                $scope.allowAssign = false;
+                $scope.assigned_user = null;
+                $scope.users = [];
                 $scope.$on("user:login", function(data) {
                     $scope.data.uid = firebaseHelper.getUID();
                     $scope.user_profile = firebaseHelper.syncObject(["profiles_pub", $scope.data.uid]);
+                    $scope.allowAssign = firebaseHelper.getRole() === "admin" || firebaseHelper.getRole() === "mod";
+                    if ($scope.allowAssign) {
+                        $scope.users = [];
+                        firebaseHelper.getFireBaseInstance("profiles_pub").once("value", function(snapshot) {
+                            snapshot.forEach(function(childSnapshot) {
+                                $scope.users.push({
+                                    display_name: childSnapshot.val().display_name,
+                                    uid: childSnapshot.key()
+                                });
+                            });
+                            $scope.assigned_user = "";
+                            $scope.$apply();
+                        })
+                    }
                 });
 
                 $scope.onCancel = function() {
@@ -209,6 +233,11 @@ angular.module('inspinia')
                         <p><strong>{{user_profile.display_name}}</strong></p> \
                         <textarea maxlength="140" placeholder="Enter your idea here" class="form-control" rows="6" ng-model="data.title"> </textarea> \
                         <p></p> \
+                        <p><strong>Idea of</strong></p> \
+                        <select class="form-control m-b" name="account" ng-model="assigned_user"> \
+                            <option value="">@me</option> \
+                            <option ng-repeat="u in users" value="{{u.uid}}">{{u.display_name}}</option> \
+                        </select> \
                         <div class="pull-right"> \
                             <strong>{{140 - data.title.length}} chars left </strong> \
                             <a ng-disabled="!data.title" class="btn btn-xs btn-white" ng-click="onSave()"><i class="fa fa-save"></i> Save</a> \
