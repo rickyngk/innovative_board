@@ -161,7 +161,7 @@ angular.module('inspinia')
         }
     })
 
-    .directive('newIdeaFeed', function() {
+    .directive('newIdeaFeed', function($timeout) {
         return {
             restrict: 'E',
             scope: {
@@ -198,24 +198,37 @@ angular.module('inspinia')
                 $scope.allowAssign = false;
                 $scope.assigned_user = null;
                 $scope.users = [];
-                $scope.$on("user:login", function(data) {
-                    $scope.data.uid = firebaseHelper.getUID();
-                    $scope.user_profile = firebaseHelper.syncObject(["profiles_pub", $scope.data.uid]);
-                    $scope.allowAssign = firebaseHelper.getRole() === "admin" || firebaseHelper.getRole() === "mod";
-                    if ($scope.allowAssign) {
-                        $scope.users = [];
-                        firebaseHelper.getFireBaseInstance("profiles_pub").once("value", function(snapshot) {
-                            snapshot.forEach(function(childSnapshot) {
-                                $scope.users.push({
-                                    display_name: childSnapshot.val().display_name,
-                                    uid: childSnapshot.key()
+
+                var doSync = function() {
+                    console.log("xxxxxx");
+                    if (firebaseHelper.getUID()) {
+                        $scope.data.uid = firebaseHelper.getUID();
+                        $scope.user_profile = firebaseHelper.syncObject(["profiles_pub", $scope.data.uid]);
+                        $scope.allowAssign = firebaseHelper.getRole() === "admin" || firebaseHelper.getRole() === "mod";
+                        if ($scope.allowAssign) {
+                            $scope.users = [];
+                            firebaseHelper.getFireBaseInstance("profiles_pub").once("value", function(snapshot) {
+                                snapshot.forEach(function(childSnapshot) {
+                                    $scope.users.push({
+                                        display_name: childSnapshot.val().display_name,
+                                        uid: childSnapshot.key()
+                                    });
                                 });
-                            });
-                            $scope.assigned_user = "";
+                                $scope.assigned_user = "";
+                                $scope.$apply();
+                            })
+                        }
+                        $timeout(function() {
                             $scope.$apply();
-                        })
+                        }, 100)
                     }
+                }
+
+                $scope.$on("user:login", function(data) {
+                    console.log("yyyyyyy");
+                    doSync();
                 });
+                doSync();
 
                 $scope.onCancel = function() {
                     $scope.data.title = "";
