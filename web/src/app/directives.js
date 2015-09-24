@@ -40,7 +40,8 @@ angular.module('inspinia')
         return {
             restrict: 'E',
             scope: {
-                data: '='
+                data: '=',
+                group: '@'
             },
             controller: function($scope, firebaseHelper, $sce, $rootScope) {
                 var date = new Date($scope.data.createdDate)
@@ -60,30 +61,32 @@ angular.module('inspinia')
                 $scope.user_profile = firebaseHelper.syncObject("profiles_pub/" + $scope.data.uid);
                 $scope.gravatar = $rootScope.gravatar;
 
-                $scope.ideas_stat = firebaseHelper.syncObject("ideas_stat/" + $scope.data.$id);
-                $scope.ideas_vote = firebaseHelper.syncObject(["ideas_votes", $scope.data.$id, $scope.data.uid]);
+                $scope.ideas_stat = firebaseHelper.syncObject(["ideas", $scope.group, $scope.data.$id, "stat"]);
+                $scope.ideas_vote = firebaseHelper.syncObject(["ideas_votes", $scope.group, $scope.data.$id, $scope.data.uid]);
 
                 var upvote = function(from_down_vote) {
-                    firebaseHelper.transaction(["ideas_stat", $scope.data.$id], function(data) {
+                    firebaseHelper.transaction(["ideas", $scope.group, $scope.data.$id, "stat"], function(data) {
                         if (!data) {
-                            data = {up_votes: 0, down_votes: 0, comments: 0};
+                            data = {up_votes: 0, down_votes: 0, comments: 0, score: 0};
                         }
                         data.up_votes++;
                         if (from_down_vote) {
                             data.down_votes--;
                         }
+                        data.score = data.up_votes - data.down_votes;
                         return data;
                     })
                 }
                 var downvote = function(from_up_vote) {
-                    firebaseHelper.transaction(["ideas_stat", $scope.data.$id], function(data) {
+                    firebaseHelper.transaction(["ideas", $scope.group, $scope.data.$id, "stat"], function(data) {
                         if (!data) {
-                            data = {up_votes: 0, down_votes: 0, comments: 0};
+                            data = {up_votes: 0, down_votes: 0, comments: 0, score: 0};
                         }
                         data.down_votes++;
                         if (from_up_vote) {
                             data.up_votes--;
                         }
+                        data.score = data.up_votes - data.down_votes;
                         return data;
                     })
                 }
@@ -93,7 +96,7 @@ angular.module('inspinia')
                         $rootScope.notifyError("Something wrong @@");
                         return;
                     }
-                    firebaseHelper.transaction(["ideas_votes", $scope.data.$id, firebaseHelper.getUID()], function(data) {
+                    firebaseHelper.transaction(["ideas_votes", $scope.group, $scope.data.$id, firebaseHelper.getUID()], function(data) {
                         if (!data) { //not vote yet
                             data = {value: 0};
                         }
@@ -140,13 +143,14 @@ angular.module('inspinia')
                         <img alt="image" class="img-circle" ng-src="{{gravatar(user_profile.email)}}"> \
                     </a> \
                     <div class="media-body "> \
-                        <small class="pull-right">{{createdDate}}</small> \
+                        <small class="pull-right label label-info">{{ideas_stat.score || 0}} pts</small> \
                         <strong>{{user_profile.display_name}}</strong><br> \
+                        <small class="text-muted">{{createdDate}}</small> \
                         <div class="well">{{data.title}}</div> \
                         <div class="pull-right"> \
-                            <a class="btn btn-xs btn-white" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{ideas_stat.up_votes}}</a> \
-                            <a class="btn btn-xs btn-white" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{ideas_stat.down_votes}}</a> \
-                            <a class="btn btn-xs btn-white" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{ideas_stat.comments}}</a> \
+                            <a class="btn btn-xs btn-white" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{ideas_stat.up_votes || 0}}</a> \
+                            <a class="btn btn-xs btn-white" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{ideas_stat.down_votes || 0}}</a> \
+                            <a class="btn btn-xs btn-white" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{ideas_stat.comments || 0}}</a> \
                         </div> \
                     </div> \
             '
@@ -157,7 +161,8 @@ angular.module('inspinia')
         return {
             restrict: 'E',
             scope: {
-                onFinished: '&'
+                onFinished: '&',
+                group: '@'
             },
             controller: function($scope, firebaseHelper, $sce, $rootScope) {
                 $scope.data = {
@@ -171,7 +176,7 @@ angular.module('inspinia')
                         $scope.onCancel();
                         return;
                     }
-                    var ref = firebaseHelper.getFireBaseInstance("ideas");
+                    var ref = firebaseHelper.getFireBaseInstance(["ideas", $scope.group]);
                     ref.push().set({
                         createdDate: Date.now(),
                         title: $scope.data.title,

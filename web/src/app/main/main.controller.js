@@ -2,8 +2,13 @@ angular.module('inspinia')
   .controller('MainCtrl', function ($scope, firebaseHelper, $rootScope) {
         $scope.ideas = null;
         $scope.isLoading = true;
+        $scope.groupID = "-JzxqFZwj34iRvz2dcrk";
 
-        $scope.ideas = firebaseHelper.syncArray("ideas");
+
+        // $scope.ideas = firebaseHelper.syncArray("ideas");
+        $scope.ideas_ref = firebaseHelper.getFireBaseInstance(["ideas", $scope.groupID]);
+
+        $scope.ideas = firebaseHelper.syncArray($scope.ideas_ref);
         $scope.ideas.$loaded(function(){
             $scope.isLoading = false;
         })
