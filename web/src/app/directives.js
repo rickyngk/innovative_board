@@ -58,6 +58,13 @@ angular.module('inspinia')
                 if (sec < 10) {sec = "0" + sec};
                 $scope.createdDate = year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + sec;
 
+                $scope.$watch("data.title", function() {
+                    if ($scope.data.title) {
+                        $scope.title = $sce.trustAsHtml($scope.data.title.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+                    }
+                })
+                // $scope.title = $sce.trustAsHtml($scope.data.title.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+
                 $scope.user_profile = firebaseHelper.syncObject("profiles_pub/" + $scope.data.uid);
                 $scope.gravatar = $rootScope.gravatar;
 
@@ -146,7 +153,7 @@ angular.module('inspinia')
                         <small class="pull-right label label-info">{{ideas_stat.score || 0}} pts</small> \
                         <strong>{{user_profile.display_name}}</strong><br> \
                         <small class="text-muted">{{createdDate}}</small> \
-                        <div class="well">{{data.title}}</div> \
+                        <div class="well" ng-bind-html="title"></div> \
                         <div class="pull-right"> \
                             <a class="btn btn-xs btn-white" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{ideas_stat.up_votes || 0}}</a> \
                             <a class="btn btn-xs btn-white" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{ideas_stat.down_votes || 0}}</a> \
@@ -205,9 +212,10 @@ angular.module('inspinia')
                     <div class="media-body "> \
                         <small class="pull-right">{{createdDate}}</small> \
                         <p><strong>{{user_profile.display_name}}</strong></p> \
-                        <textarea placeholder="Enter your idea here" class="form-control" rows="6" ng-model="data.title"> </textarea> \
+                        <textarea maxlength="140" placeholder="Enter your idea here" class="form-control" rows="6" ng-model="data.title"> </textarea> \
                         <p></p> \
                         <div class="pull-right"> \
+                            <strong>{{140 - data.title.length}} chars left </strong> \
                             <a ng-disabled="!data.title" class="btn btn-xs btn-white" ng-click="onSave()"><i class="fa fa-save"></i> Save</a> \
                             <a class="btn btn-xs btn-white" ng-click="onCancel()"><i class="fa fa-trash"></i> Cancel</a> \
                         </div> \
