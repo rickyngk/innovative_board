@@ -17,6 +17,7 @@
     "font-awesome": "~4.3.0",
     "jquery": "~2.1.1",
     "metisMenu": "~2.0.2",
+    "ng-firebase-helper": "rickyngk/ng-firebase-helper",
     "PACE": "https://github.com/HubSpot/pace.git#~1.0.2"
   },
   "devDependencies": {
