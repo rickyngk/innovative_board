@@ -14,7 +14,7 @@
     <div class="pull-right">
         <a class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=1, 'btn-primary': ideas_vote.value==1}" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a>
         <a class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=-1, 'btn-danger': ideas_vote.value==-1}" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{data.down_votes || 0}}</a>
-        <a class="btn btn-xs" ng-class="{'btn-white': !showComments, 'btn-info btn-outline': showComments}" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{data.comments || 0}}</a>
+        <a class="btn btn-xs" ng-class="{'btn-white': !showComments, 'btn-outline': data.comments > 0, 'btn-primary': showComments || data.comments}" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{data.comments || 0}}</a>
     </div>
     <div class="row" style="clear:both" ng-show="showComments">
         <div class="col-lg-11 col-lg-offset-1">
