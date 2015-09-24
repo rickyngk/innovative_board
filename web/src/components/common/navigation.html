@@ -4,15 +4,18 @@
             <li class="nav-header">
 
                 <div class="dropdown profile-element" dropdown>
+                    <img alt="image" class="img-circle" style="max-width:40px" ng-src="{{gravatar(email)}}"/>
                     <a class="dropdown-toggle" dropdown-toggle href>
-                            <span class="clear">
-                                <span class="block m-t-xs">
-                                    <strong class="font-bold">{{email}}</strong>
-                             </span>
-                                <span class="text-muted text-xs block">Menu<b class="caret"></b></span>
-                            </span>
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">{{email}}</strong>
+                         </span>
+                            <span class="text-muted text-xs block">Menu<b class="caret"></b></span>
+                        </span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="" ng-click="onChangePassword()">Change password</a></li>
+                        <li class="divider"></li>
                         <li><a href="" ng-click="onLogout()">Logout</a></li>
                     </ul>
                 </div>

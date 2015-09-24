@@ -2,7 +2,7 @@
 
 angular.module('inspinia')
 
-.controller('NavCtrl', function ($scope, firebaseHelper, $timeout) {
+.controller('NavCtrl', function ($scope, firebaseHelper, $timeout, $state) {
     $scope.email = firebaseHelper.getAuthEmail();
 
     $scope.$on("user:login", function() {
@@ -11,6 +11,10 @@ angular.module('inspinia')
 
     $scope.onLogout = function() {
         firebaseHelper.logout();
+    }
+
+    $scope.onChangePassword = function() {
+        $state.go("change_pass");
     }
 })
 .controller('TopNavCtrl', function ($scope, firebaseHelper) {

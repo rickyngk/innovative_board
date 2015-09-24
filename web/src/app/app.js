@@ -9,6 +9,10 @@ angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', '
         url: '/login',
         templateUrl: "app/auth/login.html"
     })
+    .state('change_pass', {
+        url: '/change_pass',
+        templateUrl: "app/auth/change_pass.html"
+    })
 
     .state('index', {
         abstract: true,
@@ -51,6 +55,9 @@ angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', '
     });
     $rootScope.notifyError = function(message) {
         notify({ message: message, classes: 'alert-danger', templateUrl: $rootScope.inspiniaTemplate});
+    }
+    $rootScope.notifySuccess= function(message) {
+        notify({ message: message, classes: 'alert-success', templateUrl: $rootScope.inspiniaTemplate});
     }
 
     $rootScope.gravatar = function(email) {
