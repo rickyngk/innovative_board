@@ -69,7 +69,7 @@ angular.module('inspinia')
                 $scope.gravatar = $rootScope.gravatar;
 
                 $scope.ideas_stat = firebaseHelper.syncObject(["ideas", $scope.group, $scope.data.$id, "stat"]);
-                $scope.ideas_vote = firebaseHelper.syncObject(["ideas_votes", $scope.group, $scope.data.$id, $scope.data.uid]);
+                $scope.ideas_vote = firebaseHelper.syncObject(["ideas_votes", $scope.group, $scope.data.$id, firebaseHelper.getUID()]);
 
                 var upvote = function(from_down_vote) {
                     firebaseHelper.transaction(["ideas", $scope.group, $scope.data.$id, "stat"], function(data) {
@@ -121,7 +121,7 @@ angular.module('inspinia')
                         $rootScope.notifyError("Something wrong @@");
                         return;
                     }
-                    firebaseHelper.transaction(["ideas_votes", $scope.data.$id, firebaseHelper.getUID()], function(data) {
+                    firebaseHelper.transaction(["ideas_votes", $scope.group, $scope.data.$id, firebaseHelper.getUID()], function(data) {
                         if (!data) {
                             data = {value: 0};
                         }
