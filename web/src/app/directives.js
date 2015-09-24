@@ -146,7 +146,9 @@ angular.module('inspinia')
                         <img alt="image" class="img-circle" ng-src="{{gravatar(user_profile.email)}}"> \
                     </a> \
                     <div class="media-body "> \
-                        <small class="pull-right label label-info">{{data.score || 0}} pts</small> \
+                        <small ng-show="data.score > 0" class="pull-right label label-info">{{data.score || 0}} pts</small> \
+                        <small ng-show="data.score < 0" class="pull-right label label-danger">{{data.score || 0}} pts</small> \
+                        <small ng-show="!data.score || data.score == 0" class="pull-right label">{{data.score || 0}} pts</small> \
                         <strong>{{user_profile.display_name}}</strong><br> \
                         <small class="text-muted">{{createdDate}}</small> <br>\
                         <small class="text-muted">Created by: {{created_user_profile.display_name}}</small> \
