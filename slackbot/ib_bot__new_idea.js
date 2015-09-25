@@ -21,7 +21,7 @@ var process_message = function(share) {
     console.log("process_message");
     var res = share.res;
 
-    var text = share.text;
+    var text = share.text.replace(share.trigger_word, "");
     var i = 0;
     for (i = 0; i < text.length; i++) {
         if ( (text[i] >= "a" && text[i] <= "z") || (text[i] >= "A" && text[i] <= "Z")) {
