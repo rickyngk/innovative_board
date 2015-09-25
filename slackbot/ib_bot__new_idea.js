@@ -4,11 +4,15 @@ var request = require('request');
 var ref = new Firebase("https://" + keys.firebase_app + ".firebaseio.com");
 
 var create_group = function(share) {
+    console.log("create_group");
+
     var res = share.res;
     return res.status(200).json({text: "Begin create group"});
 }
 
 var get_user_profile_by_email = function(share) {
+    console.log("get_user_profile_by_email");
+
     var res = share.res;
     ref.child("profiles_pub").orderByChild("email").startAt(share.user_email).endAt(share.user_email).once('value', function(snap) {
         share.uid = snap.key();
@@ -19,6 +23,8 @@ var get_user_profile_by_email = function(share) {
 }
 
 var create_user_profile = function(share) {
+    console.log("create_user_profile");
+
     var res = share.res;
     ref.child("profiles").child(share.uid).set({
         role: "user"
@@ -43,6 +49,8 @@ var create_user_profile = function(share) {
 }
 
 var create_user = function(share) {
+    console.log("create_user");
+
     var res = share.res;
     ref.createUser({
         email: share.user_email,
