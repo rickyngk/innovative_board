@@ -29,7 +29,23 @@ var process_message = function(share) {
         }
     }
     share.text = text.substring(i, text.length);
-    return res.status(200).json({text: share.text});
+
+    ref.child("topics").child(share.group_id).push().setWithPriority({
+        comments: 0,
+        up_votes: 0,
+        down_votes: 0,
+        score: 0,
+        createdBy: share.uid,
+        title: share.text,
+        uid:  share.uid,
+        createdDate: Date.now()
+    }, -Date.now(), function(error) {
+        if (error) {
+            return res.status(200).json({text: "Something wrong. Can not post your idea."});
+        } else {
+            return res.status(200).json({text: "Great. Your idea has been posted"});
+        }
+    })
 }
 
 var create_group = function(share) {
