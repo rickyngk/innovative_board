@@ -50,7 +50,7 @@ module.exports = function (req, res, next) {
                     return res.status(200).json({text: "Invalid callback data from slack"});
                 }
                 if (!obj.ok || !obj.user) {
-                    return res.status(200).json({text: "Slack rejected request"});
+                    return res.status(200).json({text: "Slack rejected request." + body});
                 }
                 var user_email = obj.user.profile.email;
                 var user_display_bame = obj.user.name || obj.user.real_name;
