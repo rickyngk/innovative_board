@@ -30,7 +30,8 @@ var process_message = function(share) {
     }
     share.text = text.substring(i, text.length);
 
-    ref.child("topics").child(share.group_id).push().setWithPriority({
+    var push_ref = ref.child("topics").child(share.group_id).push();
+    push_ref.setWithPriority({
         comments: 0,
         up_votes: 0,
         down_votes: 0,
@@ -43,7 +44,7 @@ var process_message = function(share) {
         if (error) {
             return res.status(200).json({text: "Something wrong. Can not post your idea."});
         } else {
-            return res.status(200).json({text: "Great. Your idea has been posted"});
+            return res.status(200).json({text: "Great. Your idea has been posted with id = `" + push_ref.key() + "`"});
         }
     })
 }
