@@ -15,8 +15,8 @@ module.exports = function (req, res, next) {
     trigger_word=googlebot:
     */
 
-    var channel_id          = red.body.channel_id;
-    var channel_name        = red.body.channel_name;
+    var channel_id          = req.body.channel_id;
+    var channel_name        = req.body.channel_name;
     var user_name           = req.body.user_name;
     var user_id             = req.body.user_id;
     var text                = req.body.text;
