@@ -120,10 +120,12 @@ var create_user_email_mapping = function(share) {
 var add_group_to_user = function(share) {
     var obj = {}
     obj[share.group_id] = true;
-    ref.child("user_group").child(share.uid).push().set(obj, function() {
-        process_message(share);
-    }, function() {
-        return res.status(200).json({text: "Add user group failed abnormally!"});
+    ref.child("user_group").child(share.uid).push().set(obj, function(error) {
+        if (error) {
+            return res.status(200).json({text: "Add user group failed abnormally!"});
+        } else {
+            process_message(share);
+        }
     })
 }
 
