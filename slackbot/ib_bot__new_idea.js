@@ -14,7 +14,7 @@ var create_user_profile = function(user_email, user_display_bame, user_avatar) {
 var create_user = function(user_email, user_display_bame, user_avatar) {
     ref.createUser({
         email: user_email,
-        password: Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1) + ""
+        password: Math.round((Math.pow(36, 16 + 1) - Math.random() * Math.pow(36, 16))).toString(36).slice(1) + ""
     }, function(error, userData) {
             if (error) {
                 switch (error.code) {
