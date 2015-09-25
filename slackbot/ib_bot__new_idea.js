@@ -23,7 +23,9 @@ module.exports = function (req, res, next) {
     var trigger_text        = req.body.trigger_word;
     var message             = text.replace(trigger_text, "").trim();
 
-    if (user_name !== 'slackbot') {
+    console.log("Request received:", JSON.stringify(req.body));
+
+    if (user_name === 'slackbot') {
         return res.status(200).end();
     }
 
