@@ -7,11 +7,30 @@ var create_group = function(res) {
 
 }
 
-var create_user_profile = function(res, user_email, user_display_bame, user_avatar) {
-
+var create_user_profile = function(res, uid, user_email, user_display_bame, user_avatar, slack_id) {
+    ref.child("profiles").child(uid).set({
+        role: "user"
+    }, function(error) {
+        if (error) {
+            return res.status(200).json({text: "Error creating user role"});
+        } else {
+            ref.child("profiles_pub").child(uid).set({
+                email: user_email,
+                display_name: user_display_bame,
+                avatar: user_avatar,
+                slack_id: slack_id
+            }, function(error2) {
+                if (error2) {
+                    return res.status(200).json({text: "Error creating user public profile"});
+                } else {
+                    return res.status(200).json({text: "Successfully created user account with uid:" + uid});
+                }
+            })
+        }
+    })
 }
 
-var create_user = function(res, user_email, user_display_bame, user_avatar) {
+var create_user = function(res, user_email, user_display_bame, user_avatar, slack_id) {
     ref.createUser({
         email: user_email,
         password: Math.round((Math.pow(36, 16 + 1) - Math.random() * Math.pow(36, 16))).toString(36).slice(1) + ""
@@ -27,8 +46,7 @@ var create_user = function(res, user_email, user_display_bame, user_avatar) {
                         return res.status(200).json({text: "Error creating user"});
                 }
             } else {
-                // create_user_profile(user_email, user_display_bame, user_avatar);
-                return res.status(200).json({text: "Successfully created user account with uid:" + userData.uid});
+                create_user_profile(res, userData.uid, user_email, user_display_bame, user_avatar, slack_id);
             }
         }
     );
@@ -94,7 +112,7 @@ module.exports = function (req, res, next) {
                                 ||  obj.user.profile.image_32
                                 ||  obj.user.profile.image_24
 
-                create_user(res, user_email, user_display_name, user_avatar);
+                create_user(res, user_email, user_display_name, user_avatar, user_id);
             });
 
 
