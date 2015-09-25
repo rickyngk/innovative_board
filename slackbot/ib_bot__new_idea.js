@@ -10,7 +10,7 @@ var create_group = function(share) {
 
 var get_user_profile_by_email = function(share) {
     var res = share.res;
-    ref.child("profiles_pub").orderByChild("email").startAt(user_email).endAt(user_email).once('value', function(snap) {
+    ref.child("profiles_pub").orderByChild("email").startAt(share.user_email).endAt(share.user_email).once('value', function(snap) {
         share.uid = snap.key();
         create_group(share);
     }, function() {
