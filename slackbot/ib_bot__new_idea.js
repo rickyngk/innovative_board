@@ -79,7 +79,7 @@ var create_user_profile = function(share) {
     });
 }
 
-var create_user_email_mapping = function() {
+var create_user_email_mapping = function(share) {
     console.log("create_user_email_mapping");
 
     var res = share.res;
