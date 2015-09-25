@@ -5,7 +5,7 @@ var ref = new Firebase("https://" + keys.firebase_app + ".firebaseio.com");
 
 var create_group = function(share) {
     var res = share.res;
-    return res.status(200).json({text: "Begin create group" + JSON.stringify(share)});
+    return res.status(200).json({text: "Begin create group"});
 }
 
 var get_user_profile_by_email = function(share) {
@@ -28,7 +28,7 @@ var create_user_profile = function(share) {
         } else {
             ref.child("profiles_pub").child(share.uid).set({
                 email: share.user_email,
-                display_name: share.user_display_bame,
+                display_name: share.user_display_name,
                 avatar: share.user_avatar,
                 slack_id: share.slack_id
             }, function(error2) {
