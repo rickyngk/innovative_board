@@ -58,6 +58,9 @@ var get_user_profile_by_email = function(share) {
     ref.child("email_mapping").child(d).once('value', function(snap) {
         share.uid = snap.val();
         console.log("get_user_profile_by_email", "uid", share.uid);
+        if (!share.uid) {
+            return res.status(200).json({text: "Error getting user public profile"});
+        }
         create_user_profile(share);
     }, function() {
         return res.status(200).json({text: "Error getting user public profile"});
