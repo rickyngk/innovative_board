@@ -49,8 +49,8 @@ var get_user_profile_by_email = function(share) {
     console.log("get_user_profile_by_email");
 
     var res = share.res;
-    ref.child("profiles_pub").orderByChild("email").startAt(share.user_email).endAt(share.user_email).once('value', function(snap) {
-        share.uid = snap.val().email;
+    ref.child("email_mapping").child(share.user_email).once('value', function(snap) {
+        share.uid = snap.value();
         console.log("get_user_profile_by_email", "uid", share.uid);
         create_user_profile(share);
     }, function() {
@@ -70,6 +70,21 @@ var create_user_profile = function(share) {
         } else {
             return; // Abort the transaction.
         }
+    }, function(error, committed, snapshot) {
+        if (error) {
+            return res.status(200).json({text: "Create profile transaction failed abnormally!"});
+        } else {
+            create_user_email_mapping(share);
+        }
+    });
+}
+
+var create_user_email_mapping = function() {
+    console.log("create_user_email_mapping");
+
+    var res = share.res;
+    ref.child("email_mapping").child(share.user_email).transaction(function(currentData) {
+        return share.uid
     }, function(error, committed, snapshot) {
         if (error) {
             return res.status(200).json({text: "Create profile transaction failed abnormally!"});
