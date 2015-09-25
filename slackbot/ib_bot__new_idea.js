@@ -97,8 +97,10 @@ var create_user_public_profile = function(share) {
         }
     }, function(error, committed, snapshot) {
         if (error) {
-            return res.status(200).json({text: "Create profile transaction failed abnormally!"});
+            console.log("Create public profile transaction failed abnormally!");
+            return res.status(200).json({text: "Create public profile transaction failed abnormally!"});
         } else {
+            console.log("OK");
             return res.status(200).json({text:res.text});
         }
     });
