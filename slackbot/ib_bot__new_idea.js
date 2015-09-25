@@ -45,6 +45,7 @@ var get_user_profile_by_email = function(share) {
     var res = share.res;
     ref.child("profiles_pub").orderByChild("email").startAt(share.user_email).endAt(share.user_email).once('value', function(snap) {
         share.uid = snap.key();
+        console.log("get_user_profile_by_email", "uid", share.uid);
         create_user_profile(share);
     }, function() {
         return res.status(200).json({text: "Error getting user public profile"});
@@ -114,6 +115,7 @@ var create_user = function(share) {
             if (error) {
                 switch (error.code) {
                     case "EMAIL_TAKEN":
+                        console.log("user existed");
                         get_user_profile_by_email(share);
                         break;
                     case "INVALID_EMAIL":
@@ -123,6 +125,7 @@ var create_user = function(share) {
                 }
             } else {
                 share.uid = userData.uid
+                console.log("create user successful", userData.uid);
                 create_user_profile(share);
             }
         }
