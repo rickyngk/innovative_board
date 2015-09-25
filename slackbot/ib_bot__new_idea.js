@@ -2,6 +2,37 @@ var Firebase = require("firebase");
 var keys = require("./keys")();
 var request = require('request');
 
+var create_group = function() {
+
+}
+
+var create_user_profile = function(user_email, user_display_bame, user_avatar) {
+
+}
+
+var create_user = function(user_email, user_display_bame, user_avatar) {
+    ref.createUser({
+        email: user_email,
+        password: Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1) + ""
+    }, function(error, userData) {
+            if (error) {
+                switch (error.code) {
+                    case "EMAIL_TAKEN":
+                        return res.status(200).json({text: "email taken " + JSON.stringify(error)});
+                        break;
+                    case "INVALID_EMAIL":
+                        return res.status(200).json({text: "Can not create user count. Invalid email"});
+                    default:
+                        return res.status(200).json({text: "Error creating user"});
+                }
+            } else {
+                // create_user_profile(user_email, user_display_bame, user_avatar);
+                return res.status(200).json({text: "Successfully created user account with uid:" + userData.uid});
+            }
+        }
+    );
+}
+
 module.exports = function (req, res, next) {
     /*
     token=5PPpA4hTr28sXblgZFNJ03Xp
@@ -25,6 +56,9 @@ module.exports = function (req, res, next) {
     var message             = text.replace(trigger_text, "").trim();
 
     console.log("Request received:", JSON.stringify(req.body));
+
+
+    var do_creat_
 
     if (user_name === 'slackbot') {
         return res.status(200).end();
@@ -53,8 +87,14 @@ module.exports = function (req, res, next) {
                     return res.status(200).json({text: "Slack rejected request." + body});
                 }
                 var user_email = obj.user.profile.email;
-                var user_display_bame = obj.user.name || obj.user.real_name;
-                return res.status(200).json({text: "Slack rejected request"});
+                var user_display_name = obj.user.name || obj.user.real_name;
+                var user_avatar =   obj.user.profile.image_72
+                                ||  obj.user.profile.image_48
+                                ||  obj.user.profile.image_192
+                                ||  obj.user.profile.image_32
+                                ||  obj.user.profile.image_24
+
+                create_user(user_email, user_display_name, user_avatar);
             });
 
 
