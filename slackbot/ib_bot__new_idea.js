@@ -15,6 +15,7 @@ var Firebase = require("firebase");
 var keys = require("./keys")();
 var request = require('request');
 var ref = new Firebase("https://" + keys.firebase_app + ".firebaseio.com");
+var crypto = require('crypto');
 
 var process_message = function(share) {
     console.log("process_message");
@@ -49,7 +50,12 @@ var get_user_profile_by_email = function(share) {
     console.log("get_user_profile_by_email");
 
     var res = share.res;
-    ref.child("email_mapping").child(share.user_email).once('value', function(snap) {
+
+    var md5sum = crypto.createHash('md5');
+    md5sum.update(share.user_email);
+    var d = md5sum.digest('hex');
+
+    ref.child("email_mapping").child(d).once('value', function(snap) {
         share.uid = snap.value();
         console.log("get_user_profile_by_email", "uid", share.uid);
         create_user_profile(share);
@@ -83,7 +89,12 @@ var create_user_email_mapping = function(share) {
     console.log("create_user_email_mapping");
 
     var res = share.res;
-    ref.child("email_mapping").child(share.user_email).transaction(function(currentData) {
+
+    var md5sum = crypto.createHash('md5');
+    md5sum.update(share.user_email);
+    var d = md5sum.digest('hex');
+
+    ref.child("email_mapping").child(d).transaction(function(currentData) {
         return share.uid
     }, function(error, committed, snapshot) {
         if (error) {
