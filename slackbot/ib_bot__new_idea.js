@@ -117,7 +117,7 @@ var create_user_email_mapping = function(share) {
     });
 }
 
-var add_group_to_user = function() {
+var add_group_to_user = function(share) {
     var obj = {}
     obj[share.group_id] = true;
     ref.child("user_group").child(share.uid).push().set(obj, function() {
