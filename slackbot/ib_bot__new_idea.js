@@ -16,6 +16,12 @@ var keys = require("./keys")();
 var request = require('request');
 var ref = new Firebase("https://" + keys.firebase_app + ".firebaseio.com");
 
+var process_message = function(share) {
+    console.log("process_message");
+    var res = share.res;
+    return res.status(200).json({text: share.text});
+}
+
 var create_group = function(share) {
     console.log("create_group");
 
@@ -44,7 +50,7 @@ var get_user_profile_by_email = function(share) {
 
     var res = share.res;
     ref.child("profiles_pub").orderByChild("email").startAt(share.user_email).endAt(share.user_email).once('value', function(snap) {
-        share.uid = snap.key();
+        share.uid = snap.val().email;
         console.log("get_user_profile_by_email", "uid", share.uid);
         create_user_profile(share);
     }, function() {
@@ -97,11 +103,9 @@ var create_user_public_profile = function(share) {
         }
     }, function(error, committed, snapshot) {
         if (error) {
-            console.log("Create public profile transaction failed abnormally!");
             return res.status(200).json({text: "Create public profile transaction failed abnormally!"});
         } else {
-            console.log("OK");
-            return res.status(200).json({text:res.text});
+            process_message(share);
         }
     });
 }
