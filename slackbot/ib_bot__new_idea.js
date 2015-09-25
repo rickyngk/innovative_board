@@ -45,7 +45,7 @@ module.exports = function (req, res, next) {
                 }
                 var obj = null;
                 try {
-                    obj = JSON.stringify(body)
+                    obj = JSON.parse(body);
                 } catch (E) {
                     return res.status(200).json({text: "Invalid callback data from slack"});
                 }
