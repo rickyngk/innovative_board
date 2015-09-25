@@ -1,0 +1,7 @@
+module.exports = function () {
+    return {
+        firebase_app: "",
+        firebase_key: "",
+        slack: ""
+    }
+}
