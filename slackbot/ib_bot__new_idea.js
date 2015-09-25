@@ -3,11 +3,13 @@ var keys = require("./keys")();
 var request = require('request');
 var ref = new Firebase("https://" + keys.firebase_app + ".firebaseio.com");
 
-var create_group = function(res, share) {
+var create_group = function(share) {
+    var res = share.res;
     return res.status(200).json({text: "Begin create group" + JSON.stringify(share)});
 }
 
-var get_user_profile_by_email = function(res, share) {
+var get_user_profile_by_email = function(share) {
+    var res = share.res;
     ref.child("profiles_pub").orderByChild("email").startAt(user_email).endAt(user_email).once('value', function(snap) {
         share.uid = snap.key();
         create_group(share);
@@ -16,7 +18,8 @@ var get_user_profile_by_email = function(res, share) {
     })
 }
 
-var create_user_profile = function(res, share) {
+var create_user_profile = function(share) {
+    var res = share.res;
     ref.child("profiles").child(share.uid).set({
         role: "user"
     }, function(error) {
@@ -39,7 +42,8 @@ var create_user_profile = function(res, share) {
     })
 }
 
-var create_user = function(res, share) {
+var create_user = function(share) {
+    var res = share.res;
     ref.createUser({
         email: share.user_email,
         password: Math.round((Math.pow(36, 16 + 1) - Math.random() * Math.pow(36, 16))).toString(36).slice(1) + ""
@@ -47,7 +51,7 @@ var create_user = function(res, share) {
             if (error) {
                 switch (error.code) {
                     case "EMAIL_TAKEN":
-                        get_user_profile_by_email(res, share);
+                        get_user_profile_by_email(share);
                         break;
                     case "INVALID_EMAIL":
                         return res.status(200).json({text: "Can not create user count. Invalid email"});
@@ -56,7 +60,7 @@ var create_user = function(res, share) {
                 }
             } else {
                 share.uid = userData.uid
-                create_user_profile(res, share);
+                create_user_profile(share);
             }
         }
     );
@@ -81,7 +85,8 @@ module.exports = function (req, res, next) {
         user_name: req.body.user_name,
         slack_id: req.body.user_id,
         text: req.body.text,
-        trigger_word: req.body.trigger_word
+        trigger_word: req.body.trigger_word,
+        res: res
     }
 
     console.log("Request received:", JSON.stringify(req.body));
@@ -119,7 +124,7 @@ module.exports = function (req, res, next) {
                                 ||  obj.user.profile.image_32
                                 ||  obj.user.profile.image_24
 
-                create_user(res, share);
+                create_user(share);
             });
         }
     });
