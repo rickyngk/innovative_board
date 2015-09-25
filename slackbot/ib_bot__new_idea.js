@@ -56,7 +56,7 @@ var get_user_profile_by_email = function(share) {
     var d = md5sum.digest('hex');
 
     ref.child("email_mapping").child(d).once('value', function(snap) {
-        share.uid = snap.value();
+        share.uid = snap.val();
         console.log("get_user_profile_by_email", "uid", share.uid);
         create_user_profile(share);
     }, function() {
