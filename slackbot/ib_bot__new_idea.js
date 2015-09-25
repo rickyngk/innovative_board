@@ -1,3 +1,16 @@
+/*
+token=5PPpA4hTr28sXblgZFNJ03Xp
+team_id=T0001
+team_domain=example
+channel_id=C2147483705
+channel_name=test
+timestamp=1355517523.000005
+user_id=U2147483697
+user_name=Steve
+text=googlebot: What is the air-speed velocity of an unladen swallow?
+trigger_word=googlebot:
+*/
+
 var Firebase = require("firebase");
 var keys = require("./keys")();
 var request = require('request');
@@ -7,7 +20,23 @@ var create_group = function(share) {
     console.log("create_group");
 
     var res = share.res;
-    return res.status(200).json({text: "Begin create group"});
+    share.group_id = "slack_" + share.channel_id;
+    ref.child("groups").child(share.group_id).transaction(function(currentData) {
+        if (currentData === null) {
+            return {
+                name: "slack::" + channel_name,
+                createdDate: Date.now()
+            };
+        } else {
+            return; // Abort the transaction.
+        }
+    }, function(error, committed, snapshot) {
+        if (error) {
+            return res.status(200).json({text: "Group transaction failed abnormally!"});
+        } else {
+            create_user(share);
+        }
+    });
 }
 
 var get_user_profile_by_email = function(share) {
@@ -16,7 +45,7 @@ var get_user_profile_by_email = function(share) {
     var res = share.res;
     ref.child("profiles_pub").orderByChild("email").startAt(share.user_email).endAt(share.user_email).once('value', function(snap) {
         share.uid = snap.key();
-        create_group(share);
+        create_user_profile(share);
     }, function() {
         return res.status(200).json({text: "Error getting user public profile"});
     })
@@ -26,26 +55,52 @@ var create_user_profile = function(share) {
     console.log("create_user_profile");
 
     var res = share.res;
-    ref.child("profiles").child(share.uid).set({
-        role: "user"
-    }, function(error) {
-        if (error) {
-            return res.status(200).json({text: "Error creating user role"});
+    ref.child("profiles").child(share.uid).transaction(function(currentData) {
+        if (currentData === null) {
+            return {
+                role: "user"
+            };
         } else {
-            ref.child("profiles_pub").child(share.uid).set({
+            return; // Abort the transaction.
+        }
+    }, function(error, committed, snapshot) {
+        if (error) {
+            return res.status(200).json({text: "Create profile transaction failed abnormally!"});
+        } else {
+            create_user_public_profile(share);
+        }
+    });
+}
+
+var create_user_public_profile = function(share) {
+    console.log("create_user_public_profile");
+
+    var res = share.res;
+    ref.child("profiles_pub").child(share.uid).transaction(function(currentData) {
+        if (currentData === null) {
+            return {
                 email: share.user_email,
                 display_name: share.user_display_name,
                 avatar: share.user_avatar,
-                slack_id: share.slack_id
-            }, function(error2) {
-                if (error2) {
-                    return res.status(200).json({text: "Error creating user public profile"});
-                } else {
-                    create_group(share);
-                }
-            })
+                slack_id: share.slack_id,
+                createdDate: Date.now()
+            };
+        } else {
+            return {
+                email: share.user_email,
+                display_name: share.user_display_name,
+                avatar: share.user_avatar,
+                slack_id: share.slack_id,
+                createdDate: currentData.createdDate
+            }
         }
-    })
+    }, function(error, committed, snapshot) {
+        if (error) {
+            return res.status(200).json({text: "Create profile transaction failed abnormally!"});
+        } else {
+            return res.status(200).json({text:res.text});
+        }
+    });
 }
 
 var create_user = function(share) {
@@ -75,18 +130,6 @@ var create_user = function(share) {
 }
 
 module.exports = function (req, res, next) {
-    /*
-    token=5PPpA4hTr28sXblgZFNJ03Xp
-    team_id=T0001
-    team_domain=example
-    channel_id=C2147483705
-    channel_name=test
-    timestamp=1355517523.000005
-    user_id=U2147483697
-    user_name=Steve
-    text=googlebot: What is the air-speed velocity of an unladen swallow?
-    trigger_word=googlebot:
-    */
     var share = {
         channel_id: req.body.channel_id,
         channel_name: req.body.channel_name,
@@ -132,7 +175,7 @@ module.exports = function (req, res, next) {
                                 ||  obj.user.profile.image_32
                                 ||  obj.user.profile.image_24
 
-                create_user(share);
+                create_group(share);
             });
         }
     });
