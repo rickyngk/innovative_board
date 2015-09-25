@@ -3,15 +3,15 @@ var keys = require("./keys")();
 var request = require('request');
 var ref = new Firebase("https://" + keys.firebase_app + ".firebaseio.com");
 
-var create_group = function() {
+var create_group = function(res) {
 
 }
 
-var create_user_profile = function(user_email, user_display_bame, user_avatar) {
+var create_user_profile = function(res, user_email, user_display_bame, user_avatar) {
 
 }
 
-var create_user = function(user_email, user_display_bame, user_avatar) {
+var create_user = function(res, user_email, user_display_bame, user_avatar) {
     ref.createUser({
         email: user_email,
         password: Math.round((Math.pow(36, 16 + 1) - Math.random() * Math.pow(36, 16))).toString(36).slice(1) + ""
@@ -94,7 +94,7 @@ module.exports = function (req, res, next) {
                                 ||  obj.user.profile.image_32
                                 ||  obj.user.profile.image_24
 
-                create_user(user_email, user_display_name, user_avatar);
+                create_user(res, user_email, user_display_name, user_avatar);
             });
 
 
