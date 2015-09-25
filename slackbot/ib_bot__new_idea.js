@@ -24,7 +24,7 @@ var create_group = function(share) {
     ref.child("groups").child(share.group_id).transaction(function(currentData) {
         if (currentData === null) {
             return {
-                name: "slack::" + channel_name,
+                name: "slack::" + share.channel_name,
                 createdDate: Date.now()
             };
         } else {
