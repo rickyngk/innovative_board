@@ -1,6 +1,7 @@
 var Firebase = require("firebase");
 var keys = require("./keys")();
 var request = require('request');
+var ref = new Firebase("https://" + keys.firebase_app + ".firebaseio.com");
 
 var create_group = function() {
 
@@ -64,7 +65,6 @@ module.exports = function (req, res, next) {
         return res.status(200).end();
     }
 
-    var ref = new Firebase("https://" + keys.firebase_app + ".firebaseio.com");
     ref.authWithCustomToken(keys.firebase_key, function(error, authData) {
         if (error) {
             return res.status(200).json({text: "Authentication error"});
