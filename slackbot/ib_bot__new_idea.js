@@ -20,6 +20,15 @@ var crypto = require('crypto');
 var process_message = function(share) {
     console.log("process_message");
     var res = share.res;
+
+    var text = share.text;
+    var i = 0;
+    for (i = 0; i < text.length; i++) {
+        if ( (text[i] >= "a" && text[i] <= "z") || (text[i] >= "A" && text[i] <= "Z")) {
+            break;
+        }
+    }
+    share.text = text.substring(i, text.length);
     return res.status(200).json({text: share.text});
 }
 
@@ -108,6 +117,16 @@ var create_user_email_mapping = function(share) {
     });
 }
 
+var add_group_to_user = function() {
+    var obj = {}
+    obj[share.group_id] = true;
+    ref.child("user_group").child(share.uid).push().set(obj, function() {
+        process_message(share);
+    }, function() {
+        return res.status(200).json({text: "Add user group failed abnormally!"});
+    })
+}
+
 var create_user_public_profile = function(share) {
     console.log("create_user_public_profile");
 
@@ -134,7 +153,7 @@ var create_user_public_profile = function(share) {
         if (error) {
             return res.status(200).json({text: "Create public profile transaction failed abnormally!"});
         } else {
-            process_message(share);
+            add_group_to_user(share);
         }
     });
 }
