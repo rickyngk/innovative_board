@@ -79,7 +79,7 @@ var process_message = function(share) {
         }
     }
 
-    var push_ref = ref.child("topics").child(share.group_id).push();
+    var push_ref = ref.child("ideas").child(share.group_id).push();
     push_ref.setWithPriority({
         comments: 0,
         up_votes: 0,
@@ -186,7 +186,7 @@ var create_user_email_mapping = function(share) {
 var add_group_to_user = function(share) {
     var obj = {}
     obj[share.group_id] = true;
-    ref.child("user_group").child(share.uid).push().set(obj, function(error) {
+    ref.child("user_group").child(share.uid).set(obj, function(error) {
         if (error) {
             return res.status(200).json({text: "Add user group failed abnormally!"});
         } else {
