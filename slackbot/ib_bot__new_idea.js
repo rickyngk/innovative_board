@@ -46,7 +46,7 @@ var process_message = function(share) {
         }
     }
     share.text = normallizeText(text.substring(i, text.length));
-    share.text_partials = text.split(' ');
+    var text_partials = text.split(' ');
 
     //count number of words
     var number_of_words = text_partials.length;
@@ -56,9 +56,9 @@ var process_message = function(share) {
         if (number_of_words == 0) {
             return res.status(200).json({text: getRandomReplyMessage("say_hello")});
         } else {
-            var words = share.text_partials[0].toLowerCase();
+            var words = text_partials[0].toLowerCase();
             for (var i = 1; i < Math.min(7, number_of_words); i++) {
-                words.push( (word[i-1] + " " + (share.text_partials[i] || '')).toLowerCase() );
+                words.push( (word[i-1] + " " + (text_partials[i] || '')).toLowerCase() );
             }
             for (var i = 0; i < words.length; i++) {
                 var response = common_reply.input[word[i]];
