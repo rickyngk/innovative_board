@@ -184,15 +184,13 @@ var create_user_email_mapping = function(share) {
 }
 
 var add_group_to_user = function(share) {
-    var obj = {}
-    obj[share.group_id] = true;
-    ref.child("user_group").child(share.uid).push(obj, function(error) {
+    ref.child("user_group").child(share.uid).child(share.group_id).set(true, function(error) {
         if (error) {
             return res.status(200).json({text: "Add user group failed abnormally!"});
         } else {
             var obj = {}
             obj[share.uid] = true;
-            ref.child("group_user").child(share.group_id).push(obj, function(error) {
+            ref.child("group_user").child(share.group_id).child(share.uid).set(true, function(error) {
                 if (error) {
                     return res.status(200).json({text: "Add user group failed abnormally!"});
                 } else {
