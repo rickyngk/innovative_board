@@ -4,15 +4,17 @@
 <div class="media-body ">
     <small class="pull-right">{{createdDate}}</small>
     <p><strong>{{user_profile.display_name}}</strong></p>
-    <textarea maxlength="140" placeholder="Enter your idea here" class="form-control" rows="6" ng-model="data.title"> </textarea>
+    <textarea maxlength="512" placeholder="Enter your idea here" class="form-control" rows="6" ng-model="data.title"> </textarea>
     <p></p>
-    <p><strong>Idea of</strong></p>
-    <select class="form-control m-b" name="account" ng-model="assigned_user">
-        <option value="">@me</option>
-        <option ng-repeat="u in users" value="{{u.uid}}">{{u.display_name}}</option>
-    </select>
+    <div ng-show="$scope.users && $scope.users.length > 0">
+        <p><strong>Idea of</strong></p>
+        <select class="form-control m-b" name="account" ng-model="assigned_user">
+            <option value="">@me</option>
+            <option ng-repeat="u in users" value="{{u.uid}}">{{u.display_name}}</option>
+        </select>
+    </div>
     <div class="pull-right">
-        <strong>{{140 - data.title.length}} chars left </strong>
+        <strong>{{512 - data.title.length}} chars left </strong>
         <button ng-disabled="!data.title" class="btn btn-xs btn-primary" ng-click="onSave()"><i class="fa fa-save"></i> Save</button>
         <button class="btn btn-xs btn-warning" ng-click="onCancel()"><i class="fa fa-trash"></i> Cancel</button>
     </div>
