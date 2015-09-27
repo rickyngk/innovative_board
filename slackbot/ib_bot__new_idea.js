@@ -16,6 +16,23 @@ var keys = require("./keys")();
 var request = require('request');
 var ref = new Firebase("https://" + keys.firebase_app + ".firebaseio.com");
 var crypto = require('crypto');
+var common_reply = require("./ib_bot__common_reply")();
+
+function normallizeText(s) {
+    s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
+    s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
+    s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
+    return s;
+}
+
+function getRandomReplyMessage(s) {
+    var list = common_reply.response[s];
+    if (list && list.length > 0) {
+        var r = Math.floor(Math.random() * (list.length));
+        return common_reply.response[s][r] || "";
+    }
+    return "";
+}
 
 var process_message = function(share) {
     console.log("process_message");
@@ -28,7 +45,30 @@ var process_message = function(share) {
             break;
         }
     }
-    share.text = text.substring(i, text.length);
+    share.text = normallizeText(text.substring(i, text.length));
+    share.text_partials = text.split(' ');
+
+    //count number of words
+    var number_of_words = text_partials.length;
+
+    //tooo short, should not be an idea
+    if (number_of_words < 13) {
+        if (number_of_words == 0) {
+            return res.status(200).json({text: getRandomReplyMessage("say_hello")});
+        } else {
+            var words = share.text_partials[0].toLowerCase();
+            for (var i = 1; i < Math.min(7, number_of_words); i++) {
+                words.push( (word[i-1] + " " + (share.text_partials[i] || '')).toLowerCase() );
+            }
+            for (var i = 0; i < words.length; i++) {
+                var response = common_reply.input[word[i]];
+                if (response) {
+                    return res.status(200).json({text: getRandomReplyMessage(response)});
+                }
+            }
+            return res.status(200).json({text: getRandomReplyMessage("nothing_to_say")});
+        }
+    }
 
     var push_ref = ref.child("topics").child(share.group_id).push();
     push_ref.setWithPriority({
@@ -44,16 +84,16 @@ var process_message = function(share) {
         if (error) {
             return res.status(200).json({text: "Something wrong. Can not post your idea."});
         } else {
-            return res.status(200).json({text: "Great. Your idea has been posted with id = `" + push_ref.key() + "`"});
+            return res.status(200).json({text: "Great. Your idea has been posted with id = `" + push_ref.key() + "`\n Check out all ideas at http://iamprogrammer.work/innovative_board"});
         }
     })
 }
 
 var create_group = function(share) {
-    console.log("create_group");
-
     var res = share.res;
     share.group_id = "slack_" + share.channel_id;
+
+    console.log("begin create group if not existed", share.group_id);
     ref.child("groups").child(share.group_id).transaction(function(currentData) {
         if (currentData === null) {
             return {
