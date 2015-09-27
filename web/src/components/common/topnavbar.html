@@ -14,7 +14,7 @@
                     {{currentGroup}}
                 </a>
                 <ul class="dropdown-menu animated fadeInRight m-t-xs" ng-show="userGroups && userGroups.length > 1">
-                    <li><a ng-click="currentGroup = r" ng-repeat="r in userGroups">{{r}}</a></li>
+                    <li><a ng-click="onSelectGroup(r)" ng-repeat="r in userGroups">{{r}}</a></li>
                 </ul>
             </li>
             <li>

@@ -17,9 +17,13 @@ angular.module('inspinia')
         $state.go("change_pass");
     }
 })
-.controller('TopNavCtrl', function ($scope, firebaseHelper) {
+.controller('TopNavCtrl', function ($scope, firebaseHelper, $rootScope) {
     $scope.onLogout = function() {
         firebaseHelper.logout();
+    }
+
+    $scope.onSelectGroup = function(r) {
+        $rootScope.currentGroup = r;
     }
 })
 ;
