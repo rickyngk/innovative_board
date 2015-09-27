@@ -19,9 +19,9 @@ var crypto = require('crypto');
 var common_reply = require("./ib_bot__common_reply")();
 
 function normallizeText(s) {
-    s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
-    s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
-    s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
+    s = s.replace(/(^\s*)|(\s*$)/gi,"");
+    s = s.replace(/[ ]{2,}/gi," ");
+    s = s.replace(/\n /,"\n");
     return s;
 }
 
@@ -39,7 +39,7 @@ function getRandomReplyMessage(share, s) {
         var r = Math.floor(Math.random() * (list.length));
         str = common_reply.response[s][r] || "";
     }
-    return replaceAll(str, "{{name}}", share.user_name)
+    return replaceAll(str, "{{user}}", share.user_name)
 }
 
 var process_message = function(share) {
@@ -60,7 +60,7 @@ var process_message = function(share) {
     var number_of_words = text_partials.length;
 
     //tooo short, should not be an idea
-    if (number_of_words < 13) {
+    if (number_of_words < 7) {
         if (number_of_words == 0) {
             return res.status(200).json({text: getRandomReplyMessage(share, "say_hello")});
         } else {

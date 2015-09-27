@@ -43,11 +43,11 @@ module.exports = function () {
                 "You turn me on!"
             ],
             "nothing_to_say": [
-                ":D",
+                ":smile:",
                 ":scream_cat:",
                 ":smirk:",
                 ":hushed:",
-                ":confused:"
+                ":wink:"
             ]
         }
     }
