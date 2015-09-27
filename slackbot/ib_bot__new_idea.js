@@ -56,12 +56,13 @@ var process_message = function(share) {
         if (number_of_words == 0) {
             return res.status(200).json({text: getRandomReplyMessage("say_hello")});
         } else {
-            var words = [text_partials[0].toLowerCase()];
+            var words = [text_partials[0].toLowerCase().trim()];
             for (var i = 1; i < Math.min(7, number_of_words); i++) {
-                words.push( (words[i-1] + " " + (text_partials[i] || '')).toLowerCase() );
+                words.push( (words[i-1] + " " + (text_partials[i] || '')).toLowerCase().trim() );
             }
             for (var i = 0; i < words.length; i++) {
                 var response = common_reply.input[words[i]];
+                console.log(response, words[i]);
                 if (response) {
                     return res.status(200).json({text: getRandomReplyMessage(response)});
                 }
