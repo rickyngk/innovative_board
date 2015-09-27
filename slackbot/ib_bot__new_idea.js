@@ -25,13 +25,21 @@ function normallizeText(s) {
     return s;
 }
 
-function getRandomReplyMessage(s) {
+function escapeRegExp(string) {
+    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
+function replaceAll(string, find, replace) {
+    return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}
+
+function getRandomReplyMessage(share, s) {
+    var str ="";
     var list = common_reply.response[s];
     if (list && list.length > 0) {
         var r = Math.floor(Math.random() * (list.length));
-        return common_reply.response[s][r] || "";
+        str = common_reply.response[s][r] || "";
     }
-    return "";
+    return replaceAll(str, "{{name}}", share.user_name)
 }
 
 var process_message = function(share) {
@@ -46,7 +54,7 @@ var process_message = function(share) {
         }
     }
     share.text = normallizeText(text.substring(i, text.length));
-    var text_partials = text.split(' ');
+    var text_partials = share.text.split(' ');
 
     //count number of words
     var number_of_words = text_partials.length;
@@ -54,7 +62,7 @@ var process_message = function(share) {
     //tooo short, should not be an idea
     if (number_of_words < 13) {
         if (number_of_words == 0) {
-            return res.status(200).json({text: getRandomReplyMessage("say_hello")});
+            return res.status(200).json({text: getRandomReplyMessage(share, "say_hello")});
         } else {
             var words = [text_partials[0].toLowerCase().trim()];
             for (var i = 1; i < Math.min(7, number_of_words); i++) {
@@ -64,10 +72,10 @@ var process_message = function(share) {
                 var response = common_reply.input[words[i]];
                 console.log(response, words[i]);
                 if (response) {
-                    return res.status(200).json({text: getRandomReplyMessage(response)});
+                    return res.status(200).json({text: getRandomReplyMessage(share, response)});
                 }
             }
-            return res.status(200).json({text: getRandomReplyMessage("nothing_to_say")});
+            return res.status(200).json({text: getRandomReplyMessage(share, "nothing_to_say")});
         }
     }
 

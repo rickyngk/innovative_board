@@ -21,16 +21,16 @@ module.exports = function () {
         },
         response: {
             "say_hello": [
-                "Hello #user, how are you?",
-                "Hi #user, how’s it going?",
-                "Hi #user, what’s going on?",
-                "Hi #user, nice to see you.",
+                "Hello {{user}}, how are you?",
+                "Hi {{user}}, how’s it going?",
+                "Hi {{user}}, what’s going on?",
+                "Hi {{user}}, nice to see you.",
                 "G’day mate",
             ],
             "say_hello_response": [
-                "Hi #user, I'm fine. And you?",
+                "Hi {{user}}, I'm fine. And you?",
                 "G’day mate",
-                "Hi #user, nice to see you."
+                "Hi {{user}}, nice to see you."
             ],
             "say_love": [
                 "So sweet. I love you too",
