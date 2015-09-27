@@ -58,7 +58,7 @@ var process_message = function(share) {
         } else {
             var words = text_partials[0].toLowerCase();
             for (var i = 1; i < Math.min(7, number_of_words); i++) {
-                words.push( (word[i-1] + " " + (text_partials[i] || '')).toLowerCase() );
+                words.push( (words[i-1] + " " + (text_partials[i] || '')).toLowerCase() );
             }
             for (var i = 0; i < words.length; i++) {
                 var response = common_reply.input[word[i]];
