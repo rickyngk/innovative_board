@@ -1,5 +1,5 @@
-<a ui-sref="profile" class="pull-left">
-    <img alt="image" class="img-circle" ng-src="{{gravatar(user_profile.email)}}">
+<a class="pull-left">
+    <img alt="image" class="img-circle" ng-src="{{user_profile.avatar || gravatar(user_profile.email)}}">
 </a>
 <div class="media-body ">
     <small ng-show="data.score > 0" class="pull-right label label-info">{{data.score || 0}} pts</small>
@@ -22,7 +22,7 @@
                 <div class="social-footer">
                     <div class="social-comment" ng-repeat="c in comments">
                         <a href="" class="pull-left">
-                            <img alt="image" ng-src="{{gravatar(c.email)}}">
+                            <img alt="image" ng-src="{{c.avatar || gravatar(c.email)}}">
                         </a>
                         <div class="media-body">
                             <a href="#">
