@@ -61,7 +61,7 @@ var process_message = function(share) {
                 words.push( (words[i-1] + " " + (text_partials[i] || '')).toLowerCase() );
             }
             for (var i = 0; i < words.length; i++) {
-                var response = common_reply.input[word[i]];
+                var response = common_reply.input[words[i]];
                 if (response) {
                     return res.status(200).json({text: getRandomReplyMessage(response)});
                 }
