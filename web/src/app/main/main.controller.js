@@ -2,19 +2,10 @@ angular.module('inspinia')
   .controller('MainCtrl', function ($scope, firebaseHelper, $rootScope) {
         $scope.ideas = null;
         $scope.isLoading = true;
-        $scope.groupID = "slack_C0B977PLZ";
+        // $scope.groupID = "slack_C0B977PLZ";
 
         $rootScope.currentGroup = "";
         $rootScope.userGroups = [];
-
-
-        // $scope.ideas = firebaseHelper.syncArray("ideas");
-        $scope.ideas_ref = firebaseHelper.getFireBaseInstance(["ideas", $scope.groupID]).orderByPriority();
-
-        $scope.ideas = firebaseHelper.syncArray($scope.ideas_ref);
-        $scope.ideas.$loaded(function(){
-            $scope.isLoading = false;
-        })
 
         $scope.$on("user:login", function() {
             firebaseHelper.bindObject("profiles/" + firebaseHelper.getUID(), $scope, "data");
@@ -49,6 +40,12 @@ angular.module('inspinia')
                     }
                     $rootScope.$apply();
                     $rootScope.$broadcast('group:users',{});
+                })
+
+                $scope.ideas_ref = firebaseHelper.getFireBaseInstance(["ideas", $scope.currentGroup]).orderByPriority();
+                $scope.ideas = firebaseHelper.syncArray($scope.ideas_ref);
+                $scope.ideas.$loaded(function(){
+                    $scope.isLoading = false;
                 })
             }
         })
