@@ -190,7 +190,15 @@ var add_group_to_user = function(share) {
         if (error) {
             return res.status(200).json({text: "Add user group failed abnormally!"});
         } else {
-            process_message(share);
+            var obj = {}
+            obj[share.uid] = true;
+            ref.child("group_user").child(share.group_id).set(obj, function(error) {
+                if (error) {
+                    return res.status(200).json({text: "Add user group failed abnormally!"});
+                } else {
+                    process_message(share);
+                }
+            })
         }
     })
 }
