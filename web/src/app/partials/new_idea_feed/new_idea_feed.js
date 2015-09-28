@@ -30,6 +30,12 @@ angular.module('inspinia')
                     createdBy: firebaseHelper.getUID(),
                     status: 0
                 }, -Date.now(), function(ref) {
+                    firebaseHelper.getFireBaseInstance(["profiles_pub", firebaseHelper.getUID(), "display_name"]).once('value', function(snapshot){
+                        $rootScope.sendSlack($scope.group, "@" + snapshot.val() + " has just added idea:\n>>>" + $scope.data.title);
+                    }, function() {
+                        $rootScope.sendSlack($scope.group, "A user has just added idea:\n>>>" + $scope.data.title);
+                    });
+
                     $scope.onCancel();
                 })
             };

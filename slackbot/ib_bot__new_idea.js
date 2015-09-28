@@ -97,7 +97,8 @@ var process_message = function(share) {
         if (error) {
             return res.status(200).json({text: "Something wrong. Can not post your idea."});
         } else {
-            return res.status(200).json({text: "Great. Your idea has been posted with id = `" + push_ref.key() + "`\n Check out all ideas at https://ib-slack.firebaseapp.com/#/index/main?groupId=" + share.group_id});
+            return res.status(200).json({text: "Great. Your idea has been posted with id = `" + push_ref.key() +
+                "`\n Check out all ideas at <https://ib-slack.firebaseapp.com/#/index/main?groupId=" + share.group_id + "|here>"});
         }
     })
 }

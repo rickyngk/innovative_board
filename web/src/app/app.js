@@ -38,7 +38,7 @@ angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', '
     $urlRouterProvider.otherwise('/index/main');
 })
 
-.run(function($rootScope, $state, notify, $http) {
+.run(function($rootScope, $state, notify, $http, firebaseHelper) {
     $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
         console.log("$stateChangeError", error);
         if (error === "AUTH_REQUIRED") {
@@ -61,30 +61,18 @@ angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', '
     }
 
     $rootScope.gravatar = function(email) {
-        return "http://www.gravatar.com/avatar/" + md5(email) + "?s=200&r=pg&d=mm";
+        return "https://www.gravatar.com/avatar/" + md5(email) + "?s=200&r=pg&d=mm";
     }
 
     $rootScope.sendSlack = function(group_id, message) {
         if (group_id && message) {
-            firebaseHelper.getFireBaseInstance(["groups"], group_id).once('value', function(snapshot) {
-                var hook = snapshot.val().slack_webhook;
-                if (!hook) {
-                    console.log("No slack webhook found for group id " + group_id + ". Add slack_webhook value to groups/" + group_id + " in firebase data");
-                } else {
+            firebaseHelper.getFireBaseInstance(["groups", group_id, "slack_webhook"]).once('value', function(snapshot) {
+                var hook = snapshot.val();
+                if (hook) {
                     if (!SLACK_NOTIF_URL) {
                         console.log("Missing config SLACK_NOTIF_URL")
                     } else {
-                        $http({
-                            url: SLACK_NOTIF_URL,
-                            method: "POST",
-                            data: { webhook : hook, message: message }
-                        })
-                        .then(function(response) {
-                            console.log(response);
-                        },
-                        function(response) { // optional
-                            console.log(response);
-                        });
+                        $http.post(SLACK_NOTIF_URL, { webhook : hook, message: message });
                     }
                 }
             });

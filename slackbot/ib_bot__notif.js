@@ -4,7 +4,6 @@ module.exports = function (req, res, next) {
         text: req.body.message || '',
         username: 'Innovative Accounting Bot'
     }
-
     send(req.body.webhook || '', payload, function (error, status, body) {
         if (error) {
             return next(error);

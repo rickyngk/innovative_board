@@ -7,6 +7,11 @@ angular.module('inspinia')
             group: '@'
         },
         controller: function($scope, firebaseHelper, $sce, $rootScope) {
+
+            $scope.parseLines = function(input) {
+                return $sce.trustAsHtml(input.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+            }
+
             $scope.formatDate = function(input) {
                 var date = new Date(input)
                 var year = date.getFullYear();
@@ -23,12 +28,6 @@ angular.module('inspinia')
                 return year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + sec;
             }
             $scope.createdDate = $scope.formatDate($scope.data.createdDate)
-
-            $scope.$watch("data.title", function() {
-                if ($scope.data.title) {
-                    $scope.title = $sce.trustAsHtml($scope.data.title.replace(/(?:\r\n|\r|\n)/g, '<br />'));
-                }
-            })
 
             $scope.user_profile = firebaseHelper.syncObject("profiles_pub/" + $scope.data.uid);
             $scope.me = firebaseHelper.syncObject("profiles_pub/" + firebaseHelper.getUID());
@@ -150,7 +149,6 @@ angular.module('inspinia')
             $scope.comment = "";
             $scope.onSendComment = function() {
                 var comment = $scope.comment;
-                console.log(comment)
                 if (firebaseHelper.getUID()) {
                     $scope.comments_ref.push().set({
                         createdDate: Date.now(),
@@ -162,6 +160,8 @@ angular.module('inspinia')
                         $scope.IncrComment();
                         $scope.comment = "";
                         $scope.$digest();
+
+                        $rootScope.sendSlack($scope.group, "@" + $scope.me.display_name + " has just comment on idea:\n>>>" + $scope.data.title + "\n\n*@" + $scope.me.display_name + " said:*\n" + comment);
                     })
                 } else {
                     $rootScope.notifyError("Something wrong @@");
@@ -173,8 +173,27 @@ angular.module('inspinia')
                     if (!data) {
                         return;
                     }
+                    var last_status = data.status;
                     data.status = status;
                     data.lastChangedBy = firebaseHelper.getUID();
+
+                    var cmd = "";
+                    if (status == 0) {
+                        cmd = "*put back to discussing*"
+                    } else if (status == 1) {
+                        if (last_status == 0) {
+                            cmd = "launched"
+                        } else {
+                            cmd = "*put back to processing*"
+                        }
+                    } else if (status == 2) {
+                        cmd = "*marked as done*"
+                    } else if (status == 3) {
+                        cmd = "*marked as failed*"
+                    } else if (status == 4) {
+                        cmd = "*archived*"
+                    }
+                    $rootScope.sendSlack($scope.group, "@" + $scope.me.display_name + " has just " + cmd + " idea:\n>>>" + $scope.title );
                     return data;
                 })
             }

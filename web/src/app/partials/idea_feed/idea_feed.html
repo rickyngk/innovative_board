@@ -8,7 +8,7 @@
     <strong>{{user_profile.display_name}}</strong><br/>
     <small class="text-muted">{{createdDate}}</small>
     <small class="text-muted hidden-xs">. Created by: {{created_user_profile.display_name}}</small>
-    <div class="well" ng-bind-html="title"></div>
+    <div class="well" ng-bind-html="parseLines(data.title)"></div>
     <small class="text-success" ng-show="ideas_vote.value==1"><i class="fa fa-thumbs-up"></i> You like this </i></small>
     <small class="text-danger" ng-show="ideas_vote.value==-1"><i class="fa fa-thumbs-down"></i> You don't like this </i></small>
     <div class="pull-right">
@@ -19,7 +19,7 @@
         <a ng-if="data.status == 2 || data.status == 3" tooltip="Back to processing list" class="btn btn-xs btn-primary btn-outline" ng-click="onSetStatus(1)"><i class="fa fa-step-backward "></i> Back</a>
         <a ng-if="data.status == 2 || data.status == 3" tooltip="Archive" class="btn btn-xs btn-danger btn-outline" ng-click="onSetStatus(4)"><i class="fa fa-trash "></i> Archive</a>
 
-        &nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;
         <a tooltip="Like" class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=1, 'btn-primary': ideas_vote.value==1}" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a>
         <a tooltip="Dislike" class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=-1, 'btn-danger': ideas_vote.value==-1}" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{data.down_votes || 0}}</a>
         <a tooltip="Comment" class="btn btn-xs" ng-class="{'btn-white': !showComments, 'btn-outline': data.comments > 0, 'btn-primary': showComments || data.comments}" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{data.comments || 0}}</a>
@@ -36,7 +36,7 @@
                             <a href="#">
                                 {{c.display_name}}
                             </a>
-                            {{c.comment}}
+                            <span ng-bind-html="parseLines(c.comment)"></span>
                             <br>
                             <small class="text-muted">{{formatDate(c.createdDate)}}</small>
                         </div>

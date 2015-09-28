@@ -6,21 +6,17 @@ var port = 4000;
 var bot__new_idea = require('./ib_bot__new_idea');
 var bot__notif = require('./ib_bot__notif');
 
-var whitelist = ['http://localhost:3000', 'http://iamprogrammer.work:8080', 'https://ib-slack.firebaseapp.com'];
-var corsOptions = {
-    origin: function(origin, callback){
-        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-        callback(null, originIsWhitelisted);
-    }
-};
+
+app.use(cors());
 
 // body parser middleware
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // test route
 app.get('/', function (req, res) { res.status(200).send('Hello world!') });
 app.post('/idea', bot__new_idea);
-app.post('/notif', cors(corsOptions), bot__notif);
+app.post('/notif', bot__notif);
 
 // error handler
 app.use(function (err, req, res, next) {
