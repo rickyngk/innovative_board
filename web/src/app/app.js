@@ -25,7 +25,7 @@ angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', '
         }
     })
     .state('index.main', {
-        url: "/main",
+        url: "/main?groupId",
         templateUrl: "app/main/main.html",
         data: { pageTitle: 'Example view' }
     })

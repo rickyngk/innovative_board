@@ -1,5 +1,5 @@
 angular.module('inspinia')
-  .controller('MainCtrl', function ($scope, firebaseHelper, $rootScope) {
+  .controller('MainCtrl', function ($scope, firebaseHelper, $rootScope, $stateParams) {
         $scope.ideas = null;
         $scope.isLoadingPlainingIdea = true;
         $scope.isLoadingProcessingIdea = true;
@@ -9,6 +9,10 @@ angular.module('inspinia')
         // $scope.groupID = "slack_C0B977PLZ";
 
         $rootScope.currentGroup = "";
+        if ($stateParams.groupId) {
+            localStorage.setItem("lastOpenedGroup", $stateParams.groupId);
+        }
+
         $rootScope.groupsName = {};
         $rootScope.userGroups = [];
 
