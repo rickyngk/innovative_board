@@ -1,0 +1,57 @@
+<a class="pull-left">
+    <img alt="image" class="img-circle" ng-src="{{user_profile.avatar || gravatar(user_profile.email)}}">
+</a>
+<div class="media-body ">
+    <small ng-show="data.score > 0" class="pull-right label label-info">{{data.score || 0}} pts</small>
+    <small ng-show="data.score < 0" class="pull-right label label-danger">{{data.score || 0}} pts</small>
+    <small ng-show="!data.score || data.score == 0" class="pull-right label">{{data.score || 0}} pts</small>
+    <strong>{{user_profile.display_name}}</strong><br/>
+    <small class="text-muted">{{createdDate}}</small>
+    <small class="text-muted hidden-xs">. Created by: {{created_user_profile.display_name}}</small>
+    <div class="well" ng-bind-html="title"></div>
+    <small class="text-success" ng-show="ideas_vote.value==1"><i class="fa fa-thumbs-up"></i> You like this </i></small>
+    <small class="text-danger" ng-show="ideas_vote.value==-1"><i class="fa fa-thumbs-down"></i> You don't like this </i></small>
+    <div class="pull-right">
+        <a class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=1, 'btn-primary': ideas_vote.value==1}" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a>
+        <a class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=-1, 'btn-danger': ideas_vote.value==-1}" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{data.down_votes || 0}}</a>
+        <a class="btn btn-xs" ng-class="{'btn-white': !showComments, 'btn-outline': data.comments > 0, 'btn-primary': showComments || data.comments}" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{data.comments || 0}}</a>
+    </div>
+    <div class="row" style="clear:both" ng-show="showComments">
+        <div class="col-lg-11 col-lg-offset-1">
+            <div class="social-feed-box">
+                <div class="social-footer">
+                    <div class="social-comment" ng-repeat="c in comments">
+                        <a href="" class="pull-left">
+                            <img alt="image" ng-src="{{c.avatar || gravatar(c.email)}}">
+                        </a>
+                        <div class="media-body">
+                            <a href="#">
+                                {{c.display_name}}
+                            </a>
+                            {{c.comment}}
+                            <br>
+                            <small class="text-muted">{{formatDate(c.createdDate)}}</small>
+                        </div>
+                    </div>
+
+                    <div class="social-comment">
+                        <a href="" class="pull-left">
+                            <!-- <img alt="image" src="img/a3.jpg"> -->
+                            <img alt="image" ng-src="{{gravatar(me.email)}}">
+                        </a>
+                        <div class="media-body">
+                            <textarea maxlength="140" ng-model="comment" class="form-control" placeholder="Write comment..."></textarea>
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="pull-right">
+                        <strong>{{140 - comment.length}} chars left </strong>
+                        <button class="btn btn-xs btn-primary" ng-disabled="!comment" ng-click="onSendComment()"><i class="fa fa-send"></i> Send</button>
+                        <button class="btn btn-xs" ng-click="showComments = false"><i class="fa fa-times"></i> Close</button>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

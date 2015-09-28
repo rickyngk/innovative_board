@@ -1,7 +1,7 @@
 angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngResource', 'ui.router', 'ui.bootstrap', 'firebase', 'firebaseHelper', 'cgNotify'])
 
 .config(function ($stateProvider, $urlRouterProvider, firebaseHelperConfigProvider) {
-    firebaseHelperConfigProvider.setURL("https://innovativeboard.firebaseio.com");
+    firebaseHelperConfigProvider.setURL("https://ib-slack.firebaseio.com");
 
     $stateProvider
 

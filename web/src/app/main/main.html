@@ -1,6 +1,6 @@
 <div class="wrapper wrapper-content animated fadeInRight" ng-controller="MainCtrl">
     <div class="row">
-        <div class="col-lg-offset-2 col-lg-8">
+        <div class="col-lg-offset-1 col-lg-10">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>In discussion ideas</h5>
@@ -24,8 +24,8 @@
                                     <strong>No idea here. <a ng-click="showAddBlock = true">Create one</a> </strong>
                                 </div>
                             </div>
-                            <new-idea-feed ng-show="showAddBlock" style="display:block" group="{{groupID}}" class="feed-element" on-finished="showAddBlock = false"></new-idea-feed>
-                            <idea-feed style="display:block" class="feed-element" data="r" group="{{groupID}}" ng-repeat="r in ideas"></idea-feed>
+                            <new-idea-feed ng-show="showAddBlock" style="display:block" group="{{currentGroup}}" class="feed-element" on-finished="showAddBlock = false"></new-idea-feed>
+                            <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in ideas"></idea-feed>
                         </div>
                         <!-- <button ng-show="ideas && ideas.length > 0" class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More</button> -->
                     </div>
