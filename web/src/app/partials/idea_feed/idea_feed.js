@@ -174,6 +174,7 @@ angular.module('inspinia')
                         return;
                     }
                     data.status = status;
+                    data.lastChangedBy = firebaseHelper.getUID();
                     return data;
                 })
             }
