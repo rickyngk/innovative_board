@@ -1,12 +1,11 @@
 var request = require('request');
 module.exports = function (req, res, next) {
     var payload = {
-        text: "hello",
-        username: 'ib'
-        // channel: req.body.channel_id
+        text: req.body.message || '',
+        username: 'Innovative Accounting Bot'
     }
 
-    send(payload, function (error, status, body) {
+    send(req.body.webhook || '', payload, function (error, status, body) {
         if (error) {
             return next(error);
 
@@ -20,8 +19,7 @@ module.exports = function (req, res, next) {
      });
 }
 
-function send(payload, callback) {
-    var uri = "https://hooks.slack.com/services/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";
+function send(uri, payload, callback) {
     request({
         uri: uri,
         method: 'POST',
