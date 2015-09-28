@@ -45,11 +45,12 @@ angular.module('inspinia')
                 var ref = firebaseHelper.getFireBaseInstance(["group_user", $rootScope.currentGroup]);
                 ref.once("value", function(snapshot) {
                     var users = snapshot.val();
+                    $rootScope.groupUsers = [];
                     for (k in users) {
+                        console.log(k, users[k]);
                         if (users[k]) {
                             firebaseHelper.getFireBaseInstance(["profiles_pub", k]).once("value", function(snapshot2) {
                                 var val = snapshot2.val();
-                                $rootScope.groupUsers = [];
                                 $rootScope.groupUsers.push({
                                     display_name: val.display_name,
                                     uid: snapshot2.key()
