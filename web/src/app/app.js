@@ -35,7 +35,7 @@ angular.module('inspinia', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', '
         data: { pageTitle: 'Example view' }
     })
 
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/index/main');
 })
 
 .run(function($rootScope, $state, notify) {
