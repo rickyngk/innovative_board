@@ -5,6 +5,7 @@ angular.module('inspinia')
         $scope.isLoadingProcessingIdea = true;
         $scope.isLoadingDoneIdea = true;
         $scope.isLoadingFailIdea = true;
+        $scope.orderBy = "-createdDate";
         // $scope.groupID = "slack_C0B977PLZ";
 
         $rootScope.currentGroup = "";

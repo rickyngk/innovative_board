@@ -4,8 +4,12 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>In discussion ideas</h5>
-                    <div class="ibox-tools" ng-show="!isLoadingPlainingIdea && !showAddBlock">
+                    <div class="ibox-tools" ng-show="true || !isLoadingPlainingIdea && !showAddBlock">
                         <!-- <span class="label label-warning-light">10 Messages</span> -->
+                        <span>Sorted by: &nbsp;</span>
+                        <label> <input type="radio" checked="" value="-createdDate" ng-model="orderBy" name="optionsDiscussingItemSorting"> Date &nbsp;</label>
+                        <label> <input type="radio" checked="" value="-score" ng-model="orderBy" name="optionsDiscussingItemSorting"> Score &nbsp;</label>
+                        <label class="b-r"> <input type="radio" checked="" value="-up_votes" ng-model="orderBy" name="optionsDiscussingItemSorting"> Up votes &nbsp;&nbsp;&nbsp;</label>
                         <a class="btn btn-success btn-circle btn-outline" ng-click="showAddBlock = true" tooltip-placement="left" tooltip="Add new idea"><i class="fa fa-plus"></i>
                         </a>
                     </div>
@@ -22,7 +26,7 @@
                                 <strong>No idea here. <a ng-click="showAddBlock = true">Create one</a> </strong>
                             </div>
                             <new-idea-feed ng-show="showAddBlock" style="display:block" group="{{currentGroup}}" class="feed-element" on-finished="showAddBlock = false"></new-idea-feed>
-                            <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in ideas"></idea-feed>
+                            <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in ideas | orderBy: orderBy"></idea-feed>
                         </div>
                         <!-- <button ng-show="ideas && ideas.length > 0" class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More</button> -->
                     </div>
