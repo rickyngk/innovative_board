@@ -167,6 +167,16 @@ angular.module('inspinia')
                     $rootScope.notifyError("Something wrong @@");
                 }
             }
+
+            $scope.onSetStatus = function(status) {
+                firebaseHelper.transaction(["ideas", $scope.group, $scope.data.$id], function(data) {
+                    if (!data) {
+                        return;
+                    }
+                    data.status = status;
+                    return data;
+                })
+            }
         },
         templateUrl: "app/partials/idea_feed/idea_feed.html"
     }

@@ -88,7 +88,8 @@ var process_message = function(share) {
         createdBy: share.uid,
         title: share.text,
         uid:  share.uid,
-        createdDate: Date.now()
+        createdDate: Date.now(),
+        status: 0
     }, -Date.now(), function(error) {
         if (error) {
             return res.status(200).json({text: "Something wrong. Can not post your idea."});

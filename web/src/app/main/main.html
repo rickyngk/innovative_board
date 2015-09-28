@@ -1,12 +1,12 @@
 <div class="wrapper wrapper-content animated fadeInRight" ng-controller="MainCtrl">
     <div class="row">
-        <div class="col-lg-offset-1 col-lg-10">
+        <div class="col-lg-8">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>In discussion ideas</h5>
-                    <div class="ibox-tools" ng-show="!isLoading && !showAddBlock">
+                    <div class="ibox-tools" ng-show="!isLoadingPlainingIdea && !showAddBlock">
                         <!-- <span class="label label-warning-light">10 Messages</span> -->
-                        <a class="btn btn-success btn-circle btn-outline" ng-click="showAddBlock = true"><i class="fa fa-plus"></i>
+                        <a class="btn btn-success btn-circle btn-outline" ng-click="showAddBlock = true" tooltip-placement="left" tooltip="Add new idea"><i class="fa fa-plus"></i>
                         </a>
                     </div>
                     <div style="clear:both"></div>
@@ -14,15 +14,12 @@
                 <div class="ibox-content">
                     <div>
                         <div class="feed-activity-list">
-                            <div class="feed-element" ng-hide="!isLoading">
-                                <div class="media-body ">
-                                    <strong>Loading <i class="fa fa-refresh fa-spin"></i> </strong>
-                                </div>
+                            <div class="sk-spinner sk-spinner-double-bounce" ng-hide="!isLoadingPlainingIdea">
+                                <div class="sk-double-bounce1"></div>
+                                <div class="sk-double-bounce2"></div>
                             </div>
-                            <div class="feed-element" ng-show="!isLoading && ideas.length == 0 && !showAddBlock">
-                                <div class="media-body ">
-                                    <strong>No idea here. <a ng-click="showAddBlock = true">Create one</a> </strong>
-                                </div>
+                            <div ng-show="!isLoadingPlainingIdea && ideas.length == 0 && !showAddBlock">
+                                <strong>No idea here. <a ng-click="showAddBlock = true">Create one</a> </strong>
                             </div>
                             <new-idea-feed ng-show="showAddBlock" style="display:block" group="{{currentGroup}}" class="feed-element" on-finished="showAddBlock = false"></new-idea-feed>
                             <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in ideas"></idea-feed>
@@ -31,7 +28,81 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="col-lg-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Processing</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div>
+                                <div class="feed-activity-list">
+                                    <div class="sk-spinner sk-spinner-double-bounce" ng-hide="!isLoadingProcessingIdea">
+                                        <div class="sk-double-bounce1"></div>
+                                        <div class="sk-double-bounce2"></div>
+                                    </div>
+                                    <div ng-show="!isLoadingProcessingIdea && precessing_ideas.length == 0">
+                                        <strong>No idea</strong>
+                                    </div>
+                                    <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in precessing_ideas"></idea-feed>
+                                </div>
+                                <!-- <button ng-show="ideas && ideas.length > 0" class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Done</h5>
+                            <div style="clear:both"></div>
+                        </div>
+                        <div class="ibox-content">
+                            <div>
+                                <div class="feed-activity-list">
+                                    <div class="sk-spinner sk-spinner-double-bounce" ng-hide="!isLoadingDoneIdea">
+                                        <div class="sk-double-bounce1"></div>
+                                        <div class="sk-double-bounce2"></div>
+                                    </div>
+                                    <div ng-show="!isLoadingDoneIdea && done_ideas.length == 0">
+                                        <strong>No idea</strong>
+                                    </div>
+                                    <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in done_ideas"></idea-feed>
+                                </div>
+                                <!-- <button ng-show="ideas && ideas.length > 0" class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Failed</h5>
+                            <div style="clear:both"></div>
+                        </div>
+                        <div class="ibox-content">
+                            <div>
+                                <div class="feed-activity-list">
+                                    <div class="sk-spinner sk-spinner-double-bounce" ng-hide="!isLoadingFailIdea">
+                                        <div class="sk-double-bounce1"></div>
+                                        <div class="sk-double-bounce2"></div>
+                                    </div>
+                                    <div ng-show="!isLoadingFailIdea && fail_ideas.length == 0">
+                                        <strong>No idea</strong>
+                                    </div>
+                                    <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in fail_ideas"></idea-feed>
+                                </div>
+                                <!-- <button ng-show="ideas && ideas.length > 0" class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> Show More</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,7 +1,10 @@
 angular.module('inspinia')
   .controller('MainCtrl', function ($scope, firebaseHelper, $rootScope) {
         $scope.ideas = null;
-        $scope.isLoading = true;
+        $scope.isLoadingPlainingIdea = true;
+        $scope.isLoadingProcessingIdea = true;
+        $scope.isLoadingDoneIdea = true;
+        $scope.isLoadingFailIdea = true;
         // $scope.groupID = "slack_C0B977PLZ";
 
         $rootScope.currentGroup = "";
@@ -42,10 +45,25 @@ angular.module('inspinia')
                     $rootScope.$broadcast('group:users',{});
                 })
 
-                $scope.ideas_ref = firebaseHelper.getFireBaseInstance(["ideas", $scope.currentGroup]).orderByPriority();
+                $scope.ideas_ref = firebaseHelper.getFireBaseInstance(["ideas", $scope.currentGroup]).orderByChild("status").equalTo(0);
                 $scope.ideas = firebaseHelper.syncArray($scope.ideas_ref);
                 $scope.ideas.$loaded(function(){
-                    $scope.isLoading = false;
+                    $scope.isLoadingPlainingIdea = false;
+                })
+
+                $scope.precessing_ideas = firebaseHelper.syncArray(firebaseHelper.getFireBaseInstance(["ideas", $scope.currentGroup]).orderByChild("status").equalTo(1));
+                $scope.precessing_ideas.$loaded(function(){
+                    $scope.isLoadingProcessingIdea = false;
+                })
+
+                $scope.done_ideas = firebaseHelper.syncArray(firebaseHelper.getFireBaseInstance(["ideas", $scope.currentGroup]).orderByChild("status").equalTo(2));
+                $scope.done_ideas.$loaded(function(){
+                    $scope.isLoadingDoneIdea = false;
+                })
+
+                $scope.fail_ideas = firebaseHelper.syncArray(firebaseHelper.getFireBaseInstance(["ideas", $scope.currentGroup]).orderByChild("status").equalTo(3));
+                $scope.fail_ideas.$loaded(function(){
+                    $scope.isLoadingFailIdea = false;
                 })
             }
         })

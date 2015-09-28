@@ -28,6 +28,7 @@ angular.module('inspinia')
                     title: $scope.data.title,
                     uid: uid,
                     createdBy: firebaseHelper.getUID(),
+                    status: 0
                 }, -Date.now(), function(ref) {
                     $scope.onCancel();
                 })

@@ -12,9 +12,17 @@
     <small class="text-success" ng-show="ideas_vote.value==1"><i class="fa fa-thumbs-up"></i> You like this </i></small>
     <small class="text-danger" ng-show="ideas_vote.value==-1"><i class="fa fa-thumbs-down"></i> You don't like this </i></small>
     <div class="pull-right">
-        <a class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=1, 'btn-primary': ideas_vote.value==1}" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a>
-        <a class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=-1, 'btn-danger': ideas_vote.value==-1}" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{data.down_votes || 0}}</a>
-        <a class="btn btn-xs" ng-class="{'btn-white': !showComments, 'btn-outline': data.comments > 0, 'btn-primary': showComments || data.comments}" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{data.comments || 0}}</a>
+        <a ng-if="data.status == 0" tooltip="Move to processing" class="btn btn-xs btn-primary btn-outline" ng-click="onSetStatus(1)"><i class="fa fa-rocket"></i> Launch</a>
+        <a ng-if="data.status == 1" tooltip="Back to planning list" class="btn btn-xs btn-primary btn-outline" ng-click="onSetStatus(0)"><i class="fa fa-step-backward "></i> Back</a>
+        <a ng-if="data.status == 1" tooltip="Mark as done" class="btn btn-xs btn-success btn-outline" ng-click="onSetStatus(2)"><i class="fa fa-check"></i> Done</a>
+        <a ng-if="data.status == 1" tooltip="Mark as fail" class="btn btn-xs btn-danger btn-outline" ng-click="onSetStatus(3)"><i class="fa fa-exclamation"></i> Fail</a>
+        <a ng-if="data.status == 2" tooltip="Back to processing list" class="btn btn-xs btn-primary btn-outline" ng-click="onSetStatus(1)"><i class="fa fa-step-backward "></i> Back</a>
+        <a ng-if="data.status == 3" tooltip="Back to processing list" class="btn btn-xs btn-primary btn-outline" ng-click="onSetStatus(1)"><i class="fa fa-step-backward "></i> Back</a>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a tooltip="Like" class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=1, 'btn-primary': ideas_vote.value==1}" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a>
+        <a tooltip="Dislike" class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=-1, 'btn-danger': ideas_vote.value==-1}" ng-click="onDownVote()"><i class="fa fa-thumbs-down"></i> {{data.down_votes || 0}}</a>
+        <a tooltip="Comment" class="btn btn-xs" ng-class="{'btn-white': !showComments, 'btn-outline': data.comments > 0, 'btn-primary': showComments || data.comments}" ng-click="onComments()"><i class="fa fa-comments-o"></i> {{data.comments || 0}}</a>
     </div>
     <div class="row" style="clear:both" ng-show="showComments">
         <div class="col-lg-11 col-lg-offset-1">
