@@ -54,6 +54,9 @@ var process_message = function(share) {
         }
     }
     share.text = normallizeText(text.substring(i, text.length));
+    if (share.text.length > 1) {
+        share.text = share.text.charAt(0).toUpperCase() + share.text.slice(1);
+    }
     var text_partials = share.text.split(' ');
 
     //count number of words
