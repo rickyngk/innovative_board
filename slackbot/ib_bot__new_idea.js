@@ -39,7 +39,7 @@ function getRandomReplyMessage(share, s) {
         var r = Math.floor(Math.random() * (list.length));
         str = common_reply.response[s][r] || "";
     }
-    return replaceAll(str, "{{user}}", share.user_name)
+    return replaceAll(str, "{{user}}", "@" + share.user_name)
 }
 
 var process_message = function(share) {
@@ -94,7 +94,7 @@ var process_message = function(share) {
         if (error) {
             return res.status(200).json({text: "Something wrong. Can not post your idea."});
         } else {
-            return res.status(200).json({text: "Great. Your idea has been posted with id = `" + push_ref.key() + "`\n Check out all ideas at http://iamprogrammer.work:8080"});
+            return res.status(200).json({text: "Great. Your idea has been posted with id = `" + push_ref.key() + "`\n Check out all ideas at https://ib-slack.firebaseapp.com/#/index/main?groupId=" + share.group_id});
         }
     })
 }
