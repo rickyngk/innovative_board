@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-var port = process.env.PORT || 4000;
+var port = 4000;
 var bot__new_idea = require('./ib_bot__new_idea');
 var bot__notif = require('./ib_bot__notif');
 
