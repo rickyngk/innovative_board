@@ -1,0 +1,9 @@
+{
+  "firebase": "ib-slack",
+  "public": ".",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
