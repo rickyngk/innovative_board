@@ -11,10 +11,10 @@
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown" dropdown>
                 <a class="dropdown-toggle count-info" href dropdown-toggle>
-                    {{currentGroup}}
+                    {{groupsName[currentGroup]}}
                 </a>
                 <ul class="dropdown-menu animated fadeInRight m-t-xs" ng-show="userGroups && userGroups.length > 1">
-                    <li><a ng-click="onSelectGroup(r)" ng-repeat="r in userGroups">{{r}}</a></li>
+                    <li><a ng-click="onSelectGroup(r)" ng-repeat="r in userGroups">{{groupsName[r]}}</a></li>
                 </ul>
             </li>
             <li>

@@ -8,6 +8,7 @@ angular.module('inspinia')
         // $scope.groupID = "slack_C0B977PLZ";
 
         $rootScope.currentGroup = "";
+        $rootScope.groupsName = {};
         $rootScope.userGroups = [];
 
         $scope.$on("user:login", function() {
@@ -16,10 +17,14 @@ angular.module('inspinia')
 
             firebaseHelper.bindObject("profiles/" + firebaseHelper.getUID(), $scope, "data");
             firebaseHelper.getFireBaseInstance(["user_group", firebaseHelper.getUID()]).once("value", function(snapshot) {
+                $rootScope.groupsName = {};
                 $rootScope.userGroups = [];
                 var groups = snapshot.val();
                 for (k in groups) {
                     if (groups[k]) {
+                        firebaseHelper.getFireBaseInstance(["groups", k]).once("value", function(snapshot) {
+                            $rootScope.groupsName[snapshot.key()] = snapshot.val().name
+                        })
                         if (last_view_group == k) {
                             open_last = true;
                         }
