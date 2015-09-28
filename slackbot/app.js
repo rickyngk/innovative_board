@@ -15,8 +15,13 @@ app.post('/notif', bot__notif);
 
 // error handler
 app.use(function (err, req, res, next) {
-    console.error(err.stack);
-    res.status(400).send(err.message);
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000, http://iamprogrammer.work:8080, http://www.iamprogrammer.work:8080, https://ib-slack.firebaseapp.com");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    if (err) {
+        console.error(err.stack);
+        res.status(400).send(err.message);
+    }
+    next();
 });
 
 app.listen(port, function () {
