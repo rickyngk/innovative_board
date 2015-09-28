@@ -9,7 +9,7 @@ angular.module('inspinia')
         // $scope.groupID = "slack_C0B977PLZ";
 
         $rootScope.currentGroup = "";
-        if ($stateParams.groupId) {
+        if (typeof($stateParams.groupId) == "string" && $stateParams.groupId) {
             localStorage.setItem("lastOpenedGroup", $stateParams.groupId);
         }
 

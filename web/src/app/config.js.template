@@ -1,0 +1,2 @@
+SLACK_NOTIF_URL = "";
+FIREBASE_URL = "https://xxx.firebaseio.com";
