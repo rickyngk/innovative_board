@@ -45,7 +45,7 @@
                                         <div class="sk-double-bounce2"></div>
                                     </div>
                                     <div ng-show="!isLoadingProcessingIdea && precessing_ideas.length == 0">
-                                        <strong>No idea</strong>
+                                        <strong>No item</strong>
                                     </div>
                                     <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in precessing_ideas"></idea-feed>
                                 </div>
@@ -69,7 +69,7 @@
                                         <div class="sk-double-bounce2"></div>
                                     </div>
                                     <div ng-show="!isLoadingDoneIdea && done_ideas.length == 0">
-                                        <strong>No idea</strong>
+                                        <strong>No item</strong>
                                     </div>
                                     <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in done_ideas"></idea-feed>
                                 </div>
@@ -93,7 +93,7 @@
                                         <div class="sk-double-bounce2"></div>
                                     </div>
                                     <div ng-show="!isLoadingFailIdea && fail_ideas.length == 0">
-                                        <strong>No idea</strong>
+                                        <strong>No item</strong>
                                     </div>
                                     <idea-feed style="display:block" class="feed-element" data="r" group="{{currentGroup}}" ng-repeat="r in fail_ideas"></idea-feed>
                                 </div>

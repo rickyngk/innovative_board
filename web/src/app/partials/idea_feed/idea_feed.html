@@ -16,8 +16,8 @@
         <a ng-if="data.status == 1" tooltip="Back to planning list" class="btn btn-xs btn-primary btn-outline" ng-click="onSetStatus(0)"><i class="fa fa-step-backward "></i> Back</a>
         <a ng-if="data.status == 1" tooltip="Mark as done" class="btn btn-xs btn-success btn-outline" ng-click="onSetStatus(2)"><i class="fa fa-check"></i> Done</a>
         <a ng-if="data.status == 1" tooltip="Mark as fail" class="btn btn-xs btn-danger btn-outline" ng-click="onSetStatus(3)"><i class="fa fa-exclamation"></i> Fail</a>
-        <a ng-if="data.status == 2" tooltip="Back to processing list" class="btn btn-xs btn-primary btn-outline" ng-click="onSetStatus(1)"><i class="fa fa-step-backward "></i> Back</a>
-        <a ng-if="data.status == 3" tooltip="Back to processing list" class="btn btn-xs btn-primary btn-outline" ng-click="onSetStatus(1)"><i class="fa fa-step-backward "></i> Back</a>
+        <a ng-if="data.status == 2 || data.status == 3" tooltip="Back to processing list" class="btn btn-xs btn-primary btn-outline" ng-click="onSetStatus(1)"><i class="fa fa-step-backward "></i> Back</a>
+        <a ng-if="data.status == 2 || data.status == 3" tooltip="Archive" class="btn btn-xs btn-danger btn-outline" ng-click="onSetStatus(4)"><i class="fa fa-trash "></i> Archive</a>
 
         &nbsp;&nbsp;&nbsp;&nbsp;
         <a tooltip="Like" class="btn btn-xs" ng-class="{'btn-white': ideas_vote.value!=1, 'btn-primary': ideas_vote.value==1}" ng-click="onUpVote()"><i class="fa fa-thumbs-up"></i> {{data.up_votes || 0}}</a>
