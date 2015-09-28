@@ -24,6 +24,7 @@ angular.module('inspinia')
 
     $scope.onSelectGroup = function(r) {
         $rootScope.currentGroup = r;
+        localStorage.setItem("lastOpenedGroup", r);
     }
 })
 ;

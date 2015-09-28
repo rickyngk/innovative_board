@@ -11,16 +11,26 @@ angular.module('inspinia')
         $rootScope.userGroups = [];
 
         $scope.$on("user:login", function() {
+            var last_view_group = localStorage.getItem("lastOpenedGroup");
+            var open_last = false;
+
             firebaseHelper.bindObject("profiles/" + firebaseHelper.getUID(), $scope, "data");
             firebaseHelper.getFireBaseInstance(["user_group", firebaseHelper.getUID()]).once("value", function(snapshot) {
                 $rootScope.userGroups = [];
                 var groups = snapshot.val();
                 for (k in groups) {
                     if (groups[k]) {
+                        if (last_view_group == k) {
+                            open_last = true;
+                        }
                         $rootScope.userGroups.push(k);
                     }
                 }
-                $rootScope.currentGroup = $rootScope.userGroups[0];
+                if (open_last) {
+                    $rootScope.currentGroup = last_view_group
+                } else {
+                    $rootScope.currentGroup = $rootScope.userGroups[0];
+                }
             });
         });
 
