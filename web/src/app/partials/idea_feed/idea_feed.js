@@ -193,7 +193,7 @@ angular.module('inspinia')
                     } else if (status == 4) {
                         cmd = "*archived*"
                     }
-                    $rootScope.sendSlack($scope.group, "@" + $scope.me.display_name + " has just " + cmd + " idea:\n>>>" + $scope.title );
+                    $rootScope.sendSlack($scope.group, "@" + $scope.me.display_name + " has just " + cmd + " idea:\n>>>" + $scope.data.title );
                     return data;
                 })
             }
