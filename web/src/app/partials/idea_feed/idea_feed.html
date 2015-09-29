@@ -48,12 +48,12 @@
                             <img alt="image" ng-src="{{gravatar(me.email)}}">
                         </a>
                         <div class="media-body">
-                            <textarea maxlength="140" ng-model="comment" class="form-control" placeholder="Write comment..."></textarea>
+                            <textarea maxlength="512" ng-model="comment" class="form-control" placeholder="Write comment..."></textarea>
                         </div>
                     </div>
                     <p></p>
                     <div class="pull-right">
-                        <strong>{{140 - comment.length}} chars left </strong>
+                        <strong>{{512 - comment.length}} chars left </strong>
                         <button class="btn btn-xs btn-primary" ng-disabled="!comment" ng-click="onSendComment()"><i class="fa fa-send"></i> Send</button>
                         <button class="btn btn-xs" ng-click="showComments = false"><i class="fa fa-times"></i> Close</button>
                     </div>
