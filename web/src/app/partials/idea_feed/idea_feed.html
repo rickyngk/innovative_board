@@ -8,7 +8,9 @@
     <strong>{{user_profile.display_name}}</strong><br/>
     <small class="text-muted">{{createdDate}}</small>
     <small class="text-muted hidden-xs">. Created by: {{created_user_profile.display_name}}</small>
-    <div class="well" ng-bind-html="parseLines(data.title)"></div>
+    <div class="well visible-lg" ng-if="data.status == 0" style="font-size:1.5em; line-height:1.5" ng-bind-html="parseLines(data.title)"></div>
+    <div class="well hidden-lg" ng-if="data.status == 0" ng-bind-html="parseLines(data.title)"></div>
+    <div class="well" ng-if="data.status != 0" ng-bind-html="parseLines(data.title)"></div>
     <small class="text-success" ng-show="ideas_vote.value==1"><i class="fa fa-thumbs-up"></i> You like this </i></small>
     <small class="text-danger" ng-show="ideas_vote.value==-1"><i class="fa fa-thumbs-down"></i> You don't like this </i></small>
     <div class="pull-right">
