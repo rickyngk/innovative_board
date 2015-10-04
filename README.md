@@ -5,8 +5,8 @@ A project for studying how to use Firebase (100% Firebase-powered app).
 Idea is realy simple. User posts his ideas then teamate can vote
 
 This application includes two components:
-+ Web app, locates in /web
-+ Slack bot, used for intergrating web app with slack.
++ Web app, in `web` folder
++ Slack bot, used for intergrating web app with slack, in `slackbot` folder
 
 In current version, user can connect to application via slack only, no register module sopported. 
 
