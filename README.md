@@ -8,7 +8,7 @@ This application includes two components:
 + Web app, in `web` folder
 + Slack bot, used for intergrating web app with slack, in `slackbot` folder
 
-In current version, user can connect to application via slack only, no register module sopported. 
+In current version, user can connect to web application via slack only, no register module supported yet. 
 
 # How to run web app
 
