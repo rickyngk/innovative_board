@@ -77,5 +77,19 @@ Send notify to slack
         SLACK_NOTIF_URL = "http://<your_slackbot_domain>:4000/notif";
         
 
+## Register account
+Say `hi` with keyword defined in outcome webhook let slack bot create account for you. For example, keywork is `ic`, so
+
+        ic, hi
+        <slack bot reply here>
+        
+Post an idea:
+
+        ic, bla bla bla bla bla bla bla bla (at least 7 words)
+        
+Login wep app: after say `hi`, now your account has already been registered with email that you used with slack account. Use `forget password` function to get random password.
+
+---
+Enjoy
 
 
