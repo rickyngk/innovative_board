@@ -51,13 +51,13 @@ However, prefer using `pm2` (https://github.com/Unitech/pm2) to manage node app.
 3. Hosting your host somewhere e.g Digital Occean or Heroku
 
 # Intergate slack with Application
-## Outcome (*require*)
+## Outcome (*required*)
 Send info from slack to web-app, included register user 
 
 1. Register outcome webhook intergration at https://navigos.slack.com/services/new 
 2. Set up outcome info, point to slackbot url: http://<your_slackbot_domain>:4000/idea
 
-## Income
+## Income (optional)
 Send notify to slack
 
 1. Register income webhook intergration at (optional)
