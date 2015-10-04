@@ -62,7 +62,7 @@ Send notify to slack
 
 1. Register income webhook intergration at (optional)
 2. Set up income info, copy `Webhook URL` from slack
-3. Access your firebase appication database, find your group data at group/your_group_id, add field: `slack_webhook` with this key `id`
+3. Access your firebase appication database, find your group data at group/your_group_id, add field: `slack_webhook` with this url
 
         <your_app>
             groups
