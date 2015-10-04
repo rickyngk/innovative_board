@@ -2,7 +2,7 @@
 
 A project for studying how to use Firebase (100% Firebase-powered app).
 
-Idea is realy simple. User posts his ideas then teamate can vote
+Idea is realy simple. User posts his ideas then teamate can vote. More detail: https://www.linkedin.com/pulse/innovation-accounting-action-chris-shayan
 
 This application includes two components:
 + Web app, in `web` folder
