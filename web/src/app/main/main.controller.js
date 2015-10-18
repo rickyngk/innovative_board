@@ -16,7 +16,7 @@ angular.module('inspinia')
         $rootScope.groupsName = {};
         $rootScope.userGroups = [];
 
-        $scope.$on("user:login", function() {
+        var init = function() {
             var last_view_group = localStorage.getItem("lastOpenedGroup");
             var open_last = false;
 
@@ -42,7 +42,17 @@ angular.module('inspinia')
                     $rootScope.currentGroup = $rootScope.userGroups[0];
                 }
             });
-        });
+        }
+
+        if (firebaseHelper.getUID()) {
+            init();
+        } else {
+            $scope.$on("user:login", function() {
+                init();
+            });
+        }
+
+
 
         $scope.$watch("currentGroup", function(){
             if ($rootScope.currentGroup) {
