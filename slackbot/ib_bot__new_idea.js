@@ -112,7 +112,7 @@ var process_message = function(share) {
                         });
                     }
                 });      
-            } else if (cmd_2 == "winners") {
+            } else if (cmd_2.indexOf("win") == 0) {
                 var group_ideas = ref.child("ideas").child(share.group_id);
                 var dones = {};
                 var most_done = "-0";
@@ -140,13 +140,15 @@ var process_message = function(share) {
                             }
                         });
                         ref.child("profiles_pub").child(most_done).child("display_name").once("value", function(data) {
-                            most_done = data.val() || "none";
+                            most_done = data.val();
+                            most_done = most_done?"@" + most_done:"none";
                             ref.child("profiles_pub").child(most_fail).child("display_name").once("value", function(data2) {
-                                most_fail = data2.val() || "none";
+                                most_fail = data2.val();
+                                most_fail = most_fail?"@" + most_fail:"none";
                                 return res.status(200).json({text: 
-                                    ">>>*Who are winners*" +
-                                    "\n*Most done*: " + most_done + " - " + max_done +
-                                    "\n*Most fail*: " + most_fail + " - " + max_fail
+                                    ">>>*Who are winners?*" +
+                                    "\nMost done: " + most_done + " (" + max_done + ")" +
+                                    "\nMost fail: " + most_fail + " (" + max_fail + ")"
                                 });
                             })
                         });
