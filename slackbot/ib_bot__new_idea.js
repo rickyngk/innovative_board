@@ -68,12 +68,12 @@ var process_message = function(share) {
         var cmd = text_partials[0].toLowerCase().trim();
         if (cmd == "report") {
             var build_report = function(key, stat) {
-                var total_finished = Math.min(stat.done_ideas + stat.fail_ideas, 1);
+                var total_finished = Math.max(stat.done_ideas + stat.fail_ideas, 1);
                 var done_percent = Math.floor(stat.done_ideas*1000/total_finished)/10;
                 var fail_percent = Math.floor(stat.fail_ideas*1000/total_finished)/10;
 
                 return res.status(200).json({text: 
-                    ">>>Report " + key + 
+                    ">>>*Report " + key + "*" +
                     "\nOpen: " + stat.new_ideas + 
                     "\nProcessing: " + stat.processing_ideas + 
                     "\nDone: " + stat.done_ideas + "(" + done_percent + "%)" + 
