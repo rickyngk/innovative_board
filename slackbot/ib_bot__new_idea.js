@@ -64,43 +64,67 @@ var process_message = function(share) {
 
     //tooo short, should not be an idea
     if (number_of_words < 7) {
-        if (number_of_words == 0) {
-            return res.status(200).json({text: getRandomReplyMessage(share, "say_hello")});
-        } else {
-            var words = [text_partials[0].toLowerCase().trim()];
-            for (var i = 1; i < Math.min(7, number_of_words); i++) {
-                words.push( (words[i-1] + " " + (text_partials[i] || '')).toLowerCase().trim() );
+        //manage some actions here
+        var cmd = text_partials[0].toLowerCase().trim();
+        if (cmd == "report") {
+            var group_ideas = ref.child("ideas").child(share.group_id);
+            var stat = {
+                timestamp: (new Date()).getTime()
             }
-            for (var i = 0; i < words.length; i++) {
-                var response = common_reply.input[words[i]];
-                console.log(response, words[i]);
-                if (response) {
-                    return res.status(200).json({text: getRandomReplyMessage(share, response)});
+            group_ideas.orderByChild("status").equalTo(0).once("value", function(new_ideas) {
+                stat.new_ideas = new_ideas.numChildren();
+                group_ideas.orderByChild("status").equalTo(1).once("value", function(processing_ideas) {
+                    stat.processing_ideas = processing_ideas.numChildren();
+                    group_ideas.orderByChild("status").equalTo(2).once("value", function(done_ideas) {
+                        stat.done_ideas = done_ideas.numChildren();
+                        group_ideas.orderByChild("status").equalTo(3).once("value", function(fail_ideas) {
+                            stat.fail_ideas = fail_ideas.numChildren();
+                            stat.total = stat.new_ideas + stat.processing_ideas + stat.done_ideas + stat.fail_ideas
+                            ref.child("ideas_stat").child(share.group_id).push().set(stat);
+                            return res.status(200).json({text: ">>>1. Open: " + stat.new_ideas + "\n2. Processing: " + stat.processing_ideas + "\n3. Done: " + stat.done_ideas + "\n4. Fail: " + stat.fail_ideas + "\n---------\nTotal: " + stat.total});
+                        });
+                    });
+                });
+            });
+        } else {
+            if (number_of_words == 0) {
+                return res.status(200).json({text: getRandomReplyMessage(share, "say_hello")});
+            } else {
+                var words = [text_partials[0].toLowerCase().trim()];
+                for (var i = 1; i < Math.min(7, number_of_words); i++) {
+                    words.push( (words[i-1] + " " + (text_partials[i] || '')).toLowerCase().trim() );
                 }
+                for (var i = 0; i < words.length; i++) {
+                    var response = common_reply.input[words[i]];
+                    console.log(response, words[i]);
+                    if (response) {
+                        return res.status(200).json({text: getRandomReplyMessage(share, response)});
+                    }
+                }
+                return res.status(200).json({text: getRandomReplyMessage(share, "nothing_to_say")});
             }
-            return res.status(200).json({text: getRandomReplyMessage(share, "nothing_to_say")});
         }
+    } else {
+        var push_ref = ref.child("ideas").child(share.group_id).push();
+        push_ref.setWithPriority({
+            comments: 0,
+            up_votes: 0,
+            down_votes: 0,
+            score: 0,
+            createdBy: share.uid,
+            title: share.text,
+            uid:  share.uid,
+            createdDate: Date.now(),
+            status: 0
+        }, -Date.now(), function(error) {
+            if (error) {
+                return res.status(200).json({text: "Something wrong. Can not post your idea."});
+            } else {
+                return res.status(200).json({text: "Great. Your idea has been posted with id = `" + push_ref.key() +
+                    "`\n Check out all ideas at <" + keys.innovative_webste + "/#/index/main?groupId=" + share.group_id + "|here>"});
+            }
+        })
     }
-
-    var push_ref = ref.child("ideas").child(share.group_id).push();
-    push_ref.setWithPriority({
-        comments: 0,
-        up_votes: 0,
-        down_votes: 0,
-        score: 0,
-        createdBy: share.uid,
-        title: share.text,
-        uid:  share.uid,
-        createdDate: Date.now(),
-        status: 0
-    }, -Date.now(), function(error) {
-        if (error) {
-            return res.status(200).json({text: "Something wrong. Can not post your idea."});
-        } else {
-            return res.status(200).json({text: "Great. Your idea has been posted with id = `" + push_ref.key() +
-                "`\n Check out all ideas at <" + keys.innovative_webste + "/#/index/main?groupId=" + share.group_id + "|here>"});
-        }
-    })
 }
 
 var create_group = function(share) {
