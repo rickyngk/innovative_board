@@ -67,25 +67,48 @@ var process_message = function(share) {
         //manage some actions here
         var cmd = text_partials[0].toLowerCase().trim();
         if (cmd == "report") {
-            var group_ideas = ref.child("ideas").child(share.group_id);
-            var stat = {
-                timestamp: (new Date()).getTime()
+            var build_report = function(key, stat) {
+                var total_finished = Math.min(stat.done_ideas + stat.fail_ideas, 1);
+                var done_percent = Math.floor(stat.done_ideas*1000/total_finished)/10;
+                var fail_percent = Math.floor(stat.fail_ideas*1000/total_finished)/10;
+
+                return res.status(200).json({text: 
+                    ">>>Report " + key + 
+                    "\nOpen: " + stat.new_ideas + 
+                    "\nProcessing: " + stat.processing_ideas + 
+                    "\nDone: " + stat.done_ideas + "(" + done_percent + "%)" + 
+                    "\nFail: " + stat.fail_ideas + "(" + fail_percent + "%)" + 
+                    "\n---------\nTotal: " + stat.total});
             }
-            group_ideas.orderByChild("status").equalTo(0).once("value", function(new_ideas) {
-                stat.new_ideas = new_ideas.numChildren();
-                group_ideas.orderByChild("status").equalTo(1).once("value", function(processing_ideas) {
-                    stat.processing_ideas = processing_ideas.numChildren();
-                    group_ideas.orderByChild("status").equalTo(2).once("value", function(done_ideas) {
-                        stat.done_ideas = done_ideas.numChildren();
-                        group_ideas.orderByChild("status").equalTo(3).once("value", function(fail_ideas) {
-                            stat.fail_ideas = fail_ideas.numChildren();
-                            stat.total = stat.new_ideas + stat.processing_ideas + stat.done_ideas + stat.fail_ideas
-                            ref.child("ideas_stat").child(share.group_id).push().set(stat);
-                            return res.status(200).json({text: ">>>1. Open: " + stat.new_ideas + "\n2. Processing: " + stat.processing_ideas + "\n3. Done: " + stat.done_ideas + "\n4. Fail: " + stat.fail_ideas + "\n---------\nTotal: " + stat.total});
+            var now = new Date();
+            var date = now.getDate();
+            var month = now.getMonth();
+            var key = now.getFullYear() + "-" + (month < 10?("0" + month):month) + "-" +  (date < 10?("0" + date):date);
+            ref.child("ideas_stat").child(share.group_id).child(key).once("value", function(snapshot) {
+                if (snapshot && snapshot.val()) {
+                    build_report(key, snapshot.val());
+                } else {
+                    var group_ideas = ref.child("ideas").child(share.group_id);
+                    var stat = {
+                        timestamp: (new Date()).getTime()
+                    }
+                    group_ideas.orderByChild("status").equalTo(0).once("value", function(new_ideas) {
+                        stat.new_ideas = new_ideas.numChildren();
+                        group_ideas.orderByChild("status").equalTo(1).once("value", function(processing_ideas) {
+                            stat.processing_ideas = processing_ideas.numChildren();
+                            group_ideas.orderByChild("status").equalTo(2).once("value", function(done_ideas) {
+                                stat.done_ideas = done_ideas.numChildren();
+                                group_ideas.orderByChild("status").equalTo(3).once("value", function(fail_ideas) {
+                                    stat.fail_ideas = fail_ideas.numChildren();
+                                    stat.total = stat.new_ideas + stat.processing_ideas + stat.done_ideas + stat.fail_ideas
+                                    ref.child("ideas_stat").child(share.group_id).child(key).set(stat);
+                                    build_report(key, stat);
+                                });
+                            });
                         });
                     });
-                });
-            });
+                }
+            });            
         } else {
             if (number_of_words == 0) {
                 return res.status(200).json({text: getRandomReplyMessage(share, "say_hello")});
