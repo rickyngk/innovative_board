@@ -76,8 +76,8 @@ var process_message = function(share) {
                     ">>>*Report " + key + "*" +
                     "\nOpen: " + stat.new_ideas + 
                     "\nProcessing: " + stat.processing_ideas + 
-                    "\nDone: " + stat.done_ideas + "(" + done_percent + "%)" + 
-                    "\nFail: " + stat.fail_ideas + "(" + fail_percent + "%)" + 
+                    "\nDone: " + stat.done_ideas + " (" + done_percent + "%)" + 
+                    "\nFail: " + stat.fail_ideas + " (" + fail_percent + "%)" + 
                     "\n---------\nTotal: " + stat.total});
             }
             var now = new Date();
